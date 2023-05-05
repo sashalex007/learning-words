@@ -2,16 +2,14 @@
 
 import { localText } from "@/storage";
 import { Button, Textarea } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 
 export const TextInput: FC = () => {
-  const { refresh } = useRouter();
   const [value, setValue] = useState(localText.get());
 
   const onSave = () => {
     localText.set(value);
-    refresh();
+    location.reload();
   };
 
   return (
