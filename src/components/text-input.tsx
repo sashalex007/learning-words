@@ -1,14 +1,14 @@
 "use client";
 
-import { localText } from "@/storage";
+import { Store } from "@/stores";
 import { Button, Textarea } from "@chakra-ui/react";
 import { FC, useState } from "react";
 
 export const TextInput: FC = () => {
-  const [value, setValue] = useState(localText.get());
+  const [value, setValue] = useState(Store.getText());
 
   const onSave = () => {
-    localText.set(value);
+    Store.setText(value);
     location.reload();
   };
 
@@ -19,7 +19,7 @@ export const TextInput: FC = () => {
         onChange={(e) => setValue(e.target.value)}
         placeholder="Enter the text you want to train on"
       />
-      <Button className="mt-3" onClick={onSave}>
+      <Button size="sm" onClick={onSave}>
         Save
       </Button>
     </>
