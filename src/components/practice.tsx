@@ -6,7 +6,7 @@ import { Button, IconButton, Input } from "@chakra-ui/react";
 import { Word } from "./word";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 
-export const Exercise: FC = () => {
+export const Practice: FC = () => {
   const [words, setWords] = useState<string[]>(Store.getExerciseWords());
   const [index, setIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
@@ -141,16 +141,20 @@ const Navigation: FC<INavigation> = ({ onChange }) => {
   };
   return (
     <div className="flex gap-2">
-      <Button onClick={reset}>back to the start</Button>
+      <Button onClick={reset} size="sm">
+        back to the start
+      </Button>
       <IconButton
         onClick={back}
         aria-label="previous exercise"
-        icon={<ArrowBackIcon boxSize={6} />}
+        icon={<ArrowBackIcon boxSize={5} />}
+        size="sm"
       />
       <IconButton
         onClick={next}
         aria-label="next exercise"
-        icon={<ArrowForwardIcon boxSize={6} />}
+        icon={<ArrowForwardIcon boxSize={5} />}
+        size="sm"
       />
     </div>
   );

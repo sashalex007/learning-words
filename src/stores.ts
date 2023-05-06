@@ -1,13 +1,11 @@
+import { DEFAULT_TEXT, DEFAULT_SIZE } from "./constant";
 import { get, set } from "./storage";
 
 export namespace Store {
-  export interface StringValidator {
-    isAcceptable(s: string): boolean;
-  }
   /*
    * text
    */
-  export const getText = (): string => get("text") || "";
+  export const getText = (): string => get("text") || DEFAULT_TEXT;
 
   export const setText = (value: string): void => set("text", value);
 
@@ -17,6 +15,13 @@ export namespace Store {
   };
 
   /*
+   * size
+   */
+  export const getSize = (): number => get("size") || DEFAULT_SIZE;
+
+  export const setSize = (value: number): void => set("size", value);
+
+  /*
    * progress
    */
   export const getProgress = () => get("progress") || 0;
@@ -24,16 +29,16 @@ export namespace Store {
   const setProgress = (value: number) => set("progress", value);
 
   export const next = () => {
-    const increment = 35;
+    const size = getSize();
     const progress = getProgress();
-    setProgress(progress + increment);
+    setProgress(progress + size);
   };
 
   export const back = () => {
-    const increment = -35;
+    const size = getSize();
     const progress = getProgress();
     const wordsCount = getWordsCount();
-    setProgress(Math.min(wordsCount - 35, Math.max(0, progress + increment)));
+    setProgress(Math.min(wordsCount - size, Math.max(0, progress - size)));
   };
 
   export const reset = () => {
@@ -53,8 +58,9 @@ export namespace Store {
 
   const getExerciseWordsFromProgress = (progress: number) => {
     const text = getText();
-    const words = getExerciseWordsFromText(text, progress, 35);
-    const learningWordsCount = Math.max(10, 35 - words.length);
+    const size = getSize();
+    const words = getExerciseWordsFromText(text, progress, size);
+    const learningWordsCount = Math.max(10, size - words.length);
     const learningWords = getWorseLearningWords(learningWordsCount);
     return [...learningWords, ...words];
   };
