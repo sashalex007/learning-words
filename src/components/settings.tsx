@@ -20,8 +20,6 @@ export const Settings: FC = () => {
   const save = () => {
     Store.setText(text);
     Store.setSize(size);
-    location.reload();
-    // TODO: remove the reload but reload on tab change
   };
 
   const reset = () => {

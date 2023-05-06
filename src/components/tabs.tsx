@@ -17,7 +17,7 @@ interface ILayoutTabs {
 export const LayoutTabs: FC<ILayoutTabs> = ({ tabs }) => {
   const borderColor = useColorModeValue("gray.200", "gray.700");
   return (
-    <Tabs variant="enclosed">
+    <Tabs isLazy variant="enclosed">
       <TabList borderColor={borderColor}>
         {tabs.map(({ tab }) => (
           <Tab key={tab}>{tab}</Tab>

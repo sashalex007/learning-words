@@ -15,7 +15,7 @@ export const Practice: FC = () => {
     Store.getLearningWords().size
   );
 
-  // TODO: Add tada animation if learningCount decrease from 1 to 0
+  // TODO: (nice to have)  Add tada animation if learningCount decrease from 1 to 0
 
   const resetExercise = () => {
     setWords(Store.getExerciseWords());
@@ -33,8 +33,8 @@ export const Practice: FC = () => {
   const currentWord = words[index];
 
   const handleChange = (value: string) => {
-    if (value.slice(-1) === " ") {
-      submitWord(value);
+    if (value.slice(-1) === " " && value.trim() === currentWord.trim()) {
+      submitWord();
     } else {
       updateWord(value);
     }
@@ -52,12 +52,7 @@ export const Practice: FC = () => {
     setInputValue(word);
   };
 
-  const submitWord = (value: string) => {
-    if (value.trim() !== currentWord.trim()) {
-      setInputValue(value);
-      return;
-    }
-
+  const submitWord = () => {
     setInputValue("");
     Store.addCorrection(currentWord);
     setLearningCount(Store.getLearningWords().size);
@@ -71,7 +66,7 @@ export const Practice: FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 mt-8">
+    <div className="flex flex-col gap-12 mt-8">
       <div>You have {learningCount} learning words</div>
 
       <Words
@@ -105,7 +100,7 @@ interface IWords {
 
 const Words: FC<IWords> = ({ words, index, errors, learningWords }) => {
   return (
-    <div className="flex gap-3 flex-wrap text-xl font-medium">
+    <div className="flex gap-3 flex-wrap text-xl font-medium mb-4">
       {words.map((word, i) => {
         return (
           <Word

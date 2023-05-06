@@ -7,7 +7,7 @@ import { FC } from "react";
 export const Header: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
-    <header className="flex items-center w-full p-2 pl-4 gap-3 max-w-4xl mx-auto">
+    <header className="flex items-center w-full p-4 gap-3 max-w-4xl mx-auto">
       <KeyboardIcon boxSize={8} />
       <div>Learning Words</div>
 

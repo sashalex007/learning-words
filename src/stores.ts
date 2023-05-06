@@ -53,7 +53,10 @@ export namespace Store {
     skip: number,
     limit: number
   ) => {
-    return text.split(/[ :\n]/).slice(skip, skip + limit);
+    return text
+      .split(/[ :\n]/)
+      .slice(skip, skip + limit)
+      .filter(Boolean);
   };
 
   const getExerciseWordsFromProgress = (progress: number) => {
