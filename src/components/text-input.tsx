@@ -23,10 +23,10 @@ export const TextInput: FC = () => {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Enter the text you want to train on"
+        variant="filled"
+        rows={10}
       />
-      <Button size="sm" onClick={onSave}>
-        Save
-      </Button>
+      <Button onClick={onSave}>Save</Button>
     </div>
   );
 };

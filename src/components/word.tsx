@@ -27,10 +27,10 @@ export const Word: FC<{
   learningCount: number;
   className?: string;
 }> = ({ word, isPast, isCurrent, isError, learningCount, className }) => {
-  let cls = "";
+  let cls = "transition-all ";
   const isLearning = learningCount > 0;
 
-  if (isCurrent) cls += "underline ";
+  if (isCurrent) cls += "underline underline-offset-4 ";
   if (isLearning) cls += "font-bold " + getColor(learningCount) + " ";
   if (isPast) cls += "text-gray-300 ";
   if (isError) cls += isPast ? "line-through " : "!text-red-400 ";

@@ -41,7 +41,10 @@ export namespace Store {
   export const getExerciseWords = () => {
     const text = getText();
     const progress = getProgress();
-    return getExerciseWordsFromText(text, progress, 35);
+    const words = getExerciseWordsFromText(text, progress, 35);
+    const learningWordsCount = Math.max(10, 35 - words.length);
+    const learningWords = getWorseLearningWords(learningWordsCount);
+    return [...learningWords, ...words];
   };
 
   /*
@@ -62,6 +65,13 @@ export namespace Store {
   export const getLearningWords = (): LearningWords => {
     const record = getLearningWordsAsRecord();
     return new Map(Object.entries(record));
+  };
+
+  const getWorseLearningWords = (count: number): string[] => {
+    const record = getLearningWordsAsRecord();
+    const list = Object.entries(record);
+    list.sort(([, a], [, b]) => b - a);
+    return list.slice(0, count).map(([word]) => word);
   };
 
   export const addLearningWord = (word: string): void => {

@@ -9,7 +9,7 @@ interface ILayoutTabs {
 
 export const LayoutTabs: FC<ILayoutTabs> = ({ tabs }) => {
   return (
-    <Tabs size="sm" variant="enclosed">
+    <Tabs variant="enclosed">
       <TabList>
         {tabs.map(({ tab }) => (
           <Tab key={tab}>{tab}</Tab>

@@ -14,7 +14,7 @@ export const Exercise: FC = () => {
     Store.getLearningWords().size
   );
 
-  // TODO: Add management of double letters like ^
+  // TODO: Add tada animation if learningCount decrease from 1 to 0
 
   const resetExercise = () => {
     setWords(Store.getExerciseWords());
@@ -44,7 +44,10 @@ export const Exercise: FC = () => {
   };
 
   const updateWord = (word: string) => {
-    if (!currentWord.startsWith(word)) {
+    const isCorrect =
+      currentWord.startsWith(word) || ["^", "¨"].includes(word.slice(-1));
+
+    if (!isCorrect) {
       setErrors((e) => e.add(index));
       Store.addLearningWord(currentWord);
       setLearningCount(Store.getLearningWords().size);
@@ -124,6 +127,7 @@ const Navigation: FC<{ next: () => void; back: () => void }> = ({
   next,
   back,
 }) => {
+  // TODO: adds reset button
   return (
     <div className="flex gap-2">
       <Button className="self-end" onClick={back} variant="outline">
