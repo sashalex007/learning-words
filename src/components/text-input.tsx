@@ -13,15 +13,18 @@ export const TextInput: FC = () => {
   };
 
   return (
-    <>
-      <Textarea
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Enter the text you want to train on"
-      />
-      <Button size="sm" onClick={onSave}>
-        Save
-      </Button>
-    </>
+    <details>
+      <summary>Settings</summary>
+      <div className="mt-4 flex flex-col gap-4 items-end">
+        <Textarea
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Enter the text you want to train on"
+        />
+        <Button size="sm" onClick={onSave}>
+          Save
+        </Button>
+      </div>
+    </details>
   );
 };

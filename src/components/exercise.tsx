@@ -47,7 +47,7 @@ export const Exercise: FC = () => {
   };
 
   const submitWord = (value: string) => {
-    if (value.trim() !== currentWord) {
+    if (value.trim() !== currentWord.trim()) {
       setInputValue(value);
       return;
     }
@@ -64,7 +64,7 @@ export const Exercise: FC = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <div className="flex gap-2 flex-wrap">
         {words.map((word, i) => {
           return (
@@ -80,19 +80,31 @@ export const Exercise: FC = () => {
         })}
       </div>
 
-      <Input
-        className="mt-3"
-        placeholder="Type here"
-        value={inputValue}
-        onChange={(e) => handleChange(e.target.value)}
-      />
+      <div className="flex gap-4 items-center justify-between">
+        <Input
+          placeholder="Type here"
+          value={inputValue}
+          onChange={(e) => handleChange(e.target.value)}
+        />
 
+        <Navigation next={next} back={back} />
+      </div>
+    </div>
+  );
+};
+
+const Navigation: FC<{ next: () => void; back: () => void }> = ({
+  next,
+  back,
+}) => {
+  return (
+    <div className="flex gap-2">
       <Button size="sm" className="self-end" onClick={back}>
         Back
       </Button>
       <Button size="sm" className="self-end" onClick={next}>
         Next
       </Button>
-    </>
+    </div>
   );
 };

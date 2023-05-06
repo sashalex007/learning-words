@@ -35,7 +35,7 @@ export namespace Store {
     skip: number,
     limit: number
   ) => {
-    return text.split(" ").slice(skip, skip + limit);
+    return text.split(/[ :\n]/).slice(skip, skip + limit);
   };
 
   export const getExerciseWords = () => {
@@ -49,7 +49,7 @@ export namespace Store {
    */
   type LearningWords = Map<string, number>;
 
-  const getLearningWordsAsRecord = (): Record<string, number> => {
+  export const getLearningWordsAsRecord = (): Record<string, number> => {
     return get("words") || {};
   };
 
@@ -78,5 +78,10 @@ export namespace Store {
       ...words,
       [word]: shouldRemoveWord ? undefined : errorCount - 1,
     });
+  };
+
+  export const removeLearningWord = (word: string): void => {
+    const words = getLearningWordsAsRecord();
+    setLearningWords({ ...words, [word]: undefined });
   };
 }

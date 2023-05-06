@@ -21,9 +21,9 @@ const getColor = (count: number): string => {
 
 export const Word: FC<{
   word: string;
-  isPast: boolean;
-  isCurrent: boolean;
-  isError: boolean;
+  isPast?: boolean;
+  isCurrent?: boolean;
+  isError?: boolean;
   learningCount: number;
 }> = ({ word, isPast, isCurrent, isError, learningCount }) => {
   let cls = "";
