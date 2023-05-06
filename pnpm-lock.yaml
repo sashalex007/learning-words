@@ -7,6 +7,9 @@ specifiers:
   '@chakra-ui/theme': ^3.1.1
   '@emotion/react': ^11.10.8
   '@emotion/styled': ^11.10.8
+  '@fontsource/open-sans': ^4.5.14
+  '@fontsource/roboto-mono': ^4.5.10
+  '@fontsource/vazirmatn': ^4.5.5
   '@types/node': 20.0.0
   '@types/react': 18.2.5
   '@types/react-dom': 18.2.3
@@ -28,6 +31,9 @@ dependencies:
   '@chakra-ui/theme': 3.1.1_krunc5eq5ukmju52vvh62v6wai
   '@emotion/react': 11.10.8_3pi6y6cylzraaxxtldk4o6b3zi
   '@emotion/styled': 11.10.8_2gvxmecv2kdsyn3t37lq4pot4i
+  '@fontsource/open-sans': 4.5.14
+  '@fontsource/roboto-mono': 4.5.10
+  '@fontsource/vazirmatn': 4.5.5
   '@types/node': 20.0.0
   '@types/react': 18.2.5
   '@types/react-dom': 18.2.3
@@ -1352,6 +1358,18 @@ packages:
   /@eslint/js/8.39.0:
     resolution: {integrity: sha512-kf9RB0Fg7NZfap83B3QOqOGg9QmD9yBudqQXzzOtn3i4y7ZUXe5ONeW34Gwi+TxhH4mvj72R1Zc300KUMa9Bng==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: false
+
+  /@fontsource/open-sans/4.5.14:
+    resolution: {integrity: sha512-mBXIIETBlW8q/ocuUN0hyGow2iuf75hQEHQt8R/RJ/HcphVbLg8KB7pHYGbFGDqs75W+SWvTC7JkVeAjT65BuQ==}
+    dev: false
+
+  /@fontsource/roboto-mono/4.5.10:
+    resolution: {integrity: sha512-KrJdmkqz6DszT2wV/bbhXef4r0hV3B0vw2mAqei8A2kRnvq+gcJLmmIeQ94vu9VEXrUQzos5M9lH1TAAXpRphw==}
+    dev: false
+
+  /@fontsource/vazirmatn/4.5.5:
+    resolution: {integrity: sha512-2OW2vd1+idDVnz3srEVm4VHd53W4cOAHIg2lnZWF0VPX/yPUpJiDi+5a2j/Z5e9xsbsoAmpD589gXX4Du0YMnw==}
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:

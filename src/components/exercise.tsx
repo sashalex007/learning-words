@@ -73,7 +73,7 @@ export const Exercise: FC = () => {
   return (
     <div className="flex flex-col gap-4">
       <div>You have {learningCount} learning words</div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap text-xl font-semibold font-robotom">
         {words.map((word, i) => {
           return (
             <Word
