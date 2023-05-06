@@ -10,6 +10,9 @@ export const Exercise: FC = () => {
   const [index, setIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [errors, setErrors] = useState(new Set<number>());
+  const [learningCount, setLearningCount] = useState(
+    Store.getLearningWords().size
+  );
 
   const resetExercise = () => {
     setWords(Store.getExerciseWords());
@@ -42,6 +45,7 @@ export const Exercise: FC = () => {
     if (!currentWord.startsWith(word)) {
       setErrors((e) => e.add(index));
       Store.addLearningWord(currentWord);
+      setLearningCount(Store.getLearningWords().size);
     }
     setInputValue(word);
   };
@@ -54,6 +58,7 @@ export const Exercise: FC = () => {
 
     setInputValue("");
     Store.addCorrection(currentWord);
+    setLearningCount(Store.getLearningWords().size);
 
     if (index === words.length - 1) {
       next();
@@ -65,6 +70,7 @@ export const Exercise: FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <div>You have {learningCount} learning words</div>
       <div className="flex gap-2 flex-wrap">
         {words.map((word, i) => {
           return (
