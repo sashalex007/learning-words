@@ -18,18 +18,15 @@ export const TextInput: FC = () => {
   // TODO: Add button to replace by list of learning words
 
   return (
-    <details>
-      <summary>Settings</summary>
-      <div className="mt-4 flex flex-col gap-4 items-end">
-        <Textarea
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Enter the text you want to train on"
-        />
-        <Button size="sm" onClick={onSave}>
-          Save
-        </Button>
-      </div>
-    </details>
+    <div className="mt-4 flex flex-col gap-4 items-end">
+      <Textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Enter the text you want to train on"
+      />
+      <Button size="sm" onClick={onSave}>
+        Save
+      </Button>
+    </div>
   );
 };

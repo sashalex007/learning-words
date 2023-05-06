@@ -71,22 +71,15 @@ export const Exercise: FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8 mt-8">
       <div>You have {learningCount} learning words</div>
-      <div className="flex gap-2 flex-wrap text-xl font-semibold font-robotom">
-        {words.map((word, i) => {
-          return (
-            <Word
-              key={word + i}
-              word={word}
-              isPast={i < index}
-              isCurrent={i === index}
-              isError={errors.has(i)}
-              learningCount={learningWords.get(word) ?? 0}
-            />
-          );
-        })}
-      </div>
+
+      <Words
+        words={words}
+        index={index}
+        errors={errors}
+        learningWords={learningWords}
+      />
 
       <div className="flex gap-4 items-center justify-between">
         <Input
@@ -101,17 +94,43 @@ export const Exercise: FC = () => {
   );
 };
 
+interface IWords {
+  words: string[];
+  errors: Set<number>;
+  index: number;
+  learningWords: Map<string, number>;
+}
+
+const Words: FC<IWords> = ({ words, index, errors, learningWords }) => {
+  return (
+    <div className="flex gap-3 flex-wrap text-xl font-semibold font-robotom">
+      {words.map((word, i) => {
+        return (
+          <Word
+            key={word + i}
+            word={word}
+            isPast={i < index}
+            isCurrent={i === index}
+            isError={errors.has(i)}
+            learningCount={learningWords.get(word) ?? 0}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 const Navigation: FC<{ next: () => void; back: () => void }> = ({
   next,
   back,
 }) => {
   return (
     <div className="flex gap-2">
-      <Button size="sm" className="self-end" onClick={back}>
-        Back
+      <Button className="self-end" onClick={back} variant="outline">
+        {"<"}
       </Button>
-      <Button size="sm" className="self-end" onClick={next}>
-        Next
+      <Button className="self-end" onClick={next} variant="outline">
+        {">"}
       </Button>
     </div>
   );

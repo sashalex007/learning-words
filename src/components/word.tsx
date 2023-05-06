@@ -25,7 +25,8 @@ export const Word: FC<{
   isCurrent?: boolean;
   isError?: boolean;
   learningCount: number;
-}> = ({ word, isPast, isCurrent, isError, learningCount }) => {
+  className?: string;
+}> = ({ word, isPast, isCurrent, isError, learningCount, className }) => {
   let cls = "";
   const isLearning = learningCount > 0;
 
@@ -33,6 +34,8 @@ export const Word: FC<{
   if (isLearning) cls += "font-bold " + getColor(learningCount) + " ";
   if (isPast) cls += "text-gray-300 ";
   if (isError) cls += isPast ? "line-through " : "!text-red-400 ";
+
+  cls += className;
 
   return <span className={cls}>{word}</span>;
 };

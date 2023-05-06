@@ -1,14 +1,17 @@
 import { Exercise } from "@/components/exercise";
 import { LearningWords } from "@/components/learning-words";
+import { LayoutTabs } from "@/components/tabs";
 import { TextInput } from "@/components/text-input";
 
 export default function Home() {
-  // TODO: use tabs
+  const tabs = [
+    { tab: "Exercise", component: <Exercise /> },
+    { tab: "Text Input", component: <TextInput /> },
+    { tab: "Learning Words", component: <LearningWords /> },
+  ];
   return (
-    <main className="max-w-2xl min-h-full m-auto p-10 flex flex-col gap-8 justify-center">
-      <TextInput />
-      <Exercise />
-      <LearningWords />
+    <main className="max-w-2xl min-h-full p-10 mx-auto">
+      <LayoutTabs tabs={tabs} />
     </main>
   );
 }
