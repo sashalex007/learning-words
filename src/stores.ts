@@ -1,12 +1,20 @@
 import { get, set } from "./storage";
 
 export namespace Store {
+  export interface StringValidator {
+    isAcceptable(s: string): boolean;
+  }
   /*
    * text
    */
-  export const getText = () => get("text") || "";
+  export const getText = (): string => get("text") || "";
 
-  export const setText = (value: string) => set("text", value);
+  export const setText = (value: string): void => set("text", value);
+
+  const getWordsCount = (): number => {
+    const text = getText();
+    return text.split(/[ :\n]/).length;
+  };
 
   /*
    * progress
@@ -24,7 +32,12 @@ export namespace Store {
   export const back = () => {
     const increment = -35;
     const progress = getProgress();
-    setProgress(Math.max(0, progress + increment));
+    const wordsCount = getWordsCount();
+    setProgress(Math.min(wordsCount - 35, Math.max(0, progress + increment)));
+  };
+
+  export const reset = () => {
+    setProgress(0);
   };
 
   /*
@@ -38,13 +51,17 @@ export namespace Store {
     return text.split(/[ :\n]/).slice(skip, skip + limit);
   };
 
-  export const getExerciseWords = () => {
+  const getExerciseWordsFromProgress = (progress: number) => {
     const text = getText();
-    const progress = getProgress();
     const words = getExerciseWordsFromText(text, progress, 35);
     const learningWordsCount = Math.max(10, 35 - words.length);
     const learningWords = getWorseLearningWords(learningWordsCount);
     return [...learningWords, ...words];
+  };
+
+  export const getExerciseWords = () => {
+    const progress = getProgress();
+    return getExerciseWordsFromProgress(progress);
   };
 
   /*

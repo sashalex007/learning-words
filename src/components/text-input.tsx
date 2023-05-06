@@ -1,10 +1,11 @@
 "use client";
 
 import { Store } from "@/stores";
-import { Button, Textarea } from "@chakra-ui/react";
+import { Box, Button, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { FC, useState } from "react";
 
 export const TextInput: FC = () => {
+  const color = useColorModeValue("gray.800", "whiteAlpha.900");
   const [value, setValue] = useState(Store.getText());
 
   const onSave = () => {
@@ -18,7 +19,7 @@ export const TextInput: FC = () => {
   // TODO: Add button to replace by list of learning words
 
   return (
-    <div className="mt-4 flex flex-col gap-4 items-end">
+    <Box color={color} className="mt-4 flex flex-col gap-4 items-end">
       <Textarea
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -27,6 +28,6 @@ export const TextInput: FC = () => {
         rows={10}
       />
       <Button onClick={onSave}>Save</Button>
-    </div>
+    </Box>
   );
 };

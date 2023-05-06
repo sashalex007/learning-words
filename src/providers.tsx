@@ -12,7 +12,7 @@ import chakraTheme from "@chakra-ui/theme";
 
 const { Button, Textarea, Input, Tabs } = chakraTheme.components;
 
-const theme = extendBaseTheme({
+export const theme = extendBaseTheme({
   components: {
     Button,
     Textarea,
@@ -28,9 +28,11 @@ const theme = extendBaseTheme({
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <CacheProvider>
+    <>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <ChakraBaseProvider theme={theme}>{children}</ChakraBaseProvider>
-    </CacheProvider>
+      <CacheProvider>
+        <ChakraBaseProvider theme={theme}>{children}</ChakraBaseProvider>
+      </CacheProvider>
+    </>
   );
 }

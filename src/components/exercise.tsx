@@ -2,8 +2,9 @@
 
 import { Store } from "@/stores";
 import { FC, useState } from "react";
-import { Button, Input } from "@chakra-ui/react";
+import { Button, IconButton, Input } from "@chakra-ui/react";
 import { Word } from "./word";
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 
 export const Exercise: FC = () => {
   const [words, setWords] = useState<string[]>(Store.getExerciseWords());
@@ -25,10 +26,6 @@ export const Exercise: FC = () => {
 
   const next = () => {
     Store.next();
-    resetExercise();
-  };
-  const back = () => {
-    Store.back();
     resetExercise();
   };
 
@@ -86,12 +83,14 @@ export const Exercise: FC = () => {
 
       <div className="flex gap-4 items-center justify-between">
         <Input
+          className="max-w-fit"
           placeholder="Type here"
           value={inputValue}
           onChange={(e) => handleChange(e.target.value)}
+          variant="filled"
         />
 
-        <Navigation next={next} back={back} />
+        <Navigation onChange={resetExercise} />
       </div>
     </div>
   );
@@ -106,7 +105,7 @@ interface IWords {
 
 const Words: FC<IWords> = ({ words, index, errors, learningWords }) => {
   return (
-    <div className="flex gap-3 flex-wrap text-xl font-semibold font-robotom">
+    <div className="flex gap-3 flex-wrap text-xl font-medium">
       {words.map((word, i) => {
         return (
           <Word
@@ -123,19 +122,36 @@ const Words: FC<IWords> = ({ words, index, errors, learningWords }) => {
   );
 };
 
-const Navigation: FC<{ next: () => void; back: () => void }> = ({
-  next,
-  back,
-}) => {
-  // TODO: adds reset button
+interface INavigation {
+  onChange: () => void;
+}
+
+const Navigation: FC<INavigation> = ({ onChange }) => {
+  const next = () => {
+    Store.next();
+    onChange();
+  };
+  const back = () => {
+    Store.back();
+    onChange();
+  };
+  const reset = () => {
+    Store.reset();
+    onChange();
+  };
   return (
     <div className="flex gap-2">
-      <Button className="self-end" onClick={back} variant="outline">
-        {"<"}
-      </Button>
-      <Button className="self-end" onClick={next} variant="outline">
-        {">"}
-      </Button>
+      <Button onClick={reset}>back to the start</Button>
+      <IconButton
+        onClick={back}
+        aria-label="previous exercise"
+        icon={<ArrowBackIcon boxSize={6} />}
+      />
+      <IconButton
+        onClick={next}
+        aria-label="next exercise"
+        icon={<ArrowForwardIcon boxSize={6} />}
+      />
     </div>
   );
 };

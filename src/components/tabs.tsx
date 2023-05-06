@@ -1,6 +1,13 @@
 "use client";
 
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { FC } from "react";
 
 interface ILayoutTabs {
@@ -8,9 +15,10 @@ interface ILayoutTabs {
 }
 
 export const LayoutTabs: FC<ILayoutTabs> = ({ tabs }) => {
+  const borderColor = useColorModeValue("gray.200", "gray.700");
   return (
     <Tabs variant="enclosed">
-      <TabList>
+      <TabList borderColor={borderColor}>
         {tabs.map(({ tab }) => (
           <Tab key={tab}>{tab}</Tab>
         ))}
