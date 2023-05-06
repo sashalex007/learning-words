@@ -14,6 +14,8 @@ export const Exercise: FC = () => {
     Store.getLearningWords().size
   );
 
+  // TODO: Add management of double letters like ^
+
   const resetExercise = () => {
     setWords(Store.getExerciseWords());
     setIndex(0);

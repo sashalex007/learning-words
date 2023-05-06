@@ -12,6 +12,11 @@ export const TextInput: FC = () => {
     location.reload();
   };
 
+  // TODO: Add instructions
+  // TODO: Add default? (buffy script)
+  // TODO: Add button to reset to default
+  // TODO: Add button to replace by list of learning words
+
   return (
     <details>
       <summary>Settings</summary>
