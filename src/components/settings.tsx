@@ -77,7 +77,7 @@ export const Settings: FC = () => {
               className="w-44"
               onClick={save}
               colorScheme="blue"
-              variant="solid"
+              variant="outline"
               size="sm"
             >
               <CheckIcon className="mr-2" />

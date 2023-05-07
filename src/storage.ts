@@ -1,8 +1,15 @@
-export const set = (key: string, value: any) =>
+const isBrowser = () => typeof window !== "undefined";
+
+export const set = (key: string, value: any) => {
+  if (!isBrowser()) return;
+
   localStorage.setItem(key, JSON.stringify(value));
+};
 
 export const get = (key: string) => {
-  const raw = localStorage?.getItem(key);
+  if (!isBrowser()) return;
+
+  const raw = localStorage.getItem(key);
   try {
     return JSON.parse(raw || "");
   } catch (e) {

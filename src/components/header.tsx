@@ -6,6 +6,7 @@ import { FC } from "react";
 
 export const Header: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  // TODO: Adds github link
   return (
     <header className="flex items-center w-full p-4 gap-3 max-w-4xl mx-auto">
       <KeyboardIcon boxSize={8} />
