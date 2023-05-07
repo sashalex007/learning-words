@@ -22,6 +22,15 @@ export namespace Store {
   export const setSize = (value: number): void => set("size", value);
 
   /*
+   * size
+   */
+  export const getIsSimpleBackspaceIgnored = (): boolean =>
+    get("ignore-simple-backspace") || false;
+
+  export const setIsSimpleBackspaceIgnored = (value: boolean): void =>
+    set("ignore-simple-backspace", value);
+
+  /*
    * progress
    */
   export const getProgress = () => get("progress") || 0;

@@ -1,10 +1,10 @@
 "use client";
 
 import { Store } from "@/stores";
-import { FC, useState } from "react";
-import { Button, IconButton, Input } from "@chakra-ui/react";
-import { Word } from "./word";
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { FC, KeyboardEventHandler, useState } from "react";
+import { Input } from "@chakra-ui/react";
+import { Words } from "./words";
+import { Navigation } from "./navigation";
 
 export const Practice: FC = () => {
   const [words, setWords] = useState<string[]>(Store.getExerciseWords());
@@ -14,6 +14,7 @@ export const Practice: FC = () => {
   const [learningCount, setLearningCount] = useState(
     Store.getLearningWords().size
   );
+  const [isCurrentShown, setIsCurrentShown] = useState(false);
 
   // TODO: (nice to have)  Add tada animation if learningCount decrease from 1 to 0
 
@@ -65,6 +66,15 @@ export const Practice: FC = () => {
     setIndex((i) => i + 1);
   };
 
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    const { key, metaKey, shiftKey, altKey, ctrlKey } = e;
+    if (key !== "Backspace") return;
+    if (!Store.getIsSimpleBackspaceIgnored()) return;
+    if (metaKey || shiftKey || altKey || ctrlKey) return;
+
+    e.preventDefault();
+  };
+
   return (
     <div className="flex flex-col gap-12 mt-8">
       <div>You have {learningCount} learning words</div>
@@ -72,85 +82,35 @@ export const Practice: FC = () => {
       <Words
         words={words}
         index={index}
+        isCurrentShown={isCurrentShown}
         errors={errors}
         learningWords={learningWords}
       />
 
-      <div className="flex gap-4 items-center justify-between">
-        <Input
-          className="max-w-fit"
-          placeholder="Type here"
-          value={inputValue}
-          onChange={(e) => handleChange(e.target.value)}
-          variant="filled"
-        />
-
-        <Navigation onChange={resetExercise} />
-      </div>
-    </div>
-  );
-};
-
-interface IWords {
-  words: string[];
-  errors: Set<number>;
-  index: number;
-  learningWords: Map<string, number>;
-}
-
-const Words: FC<IWords> = ({ words, index, errors, learningWords }) => {
-  return (
-    <div className="flex gap-3 flex-wrap text-xl font-medium mb-4">
-      {words.map((word, i) => {
-        return (
-          <Word
-            key={word + i}
-            word={word}
-            isPast={i < index}
-            isCurrent={i === index}
-            isError={errors.has(i)}
-            learningCount={learningWords.get(word) ?? 0}
+      <div className="flex gap-3 flex-col">
+        <div className="flex flex-wrap gap-4 items-center justify-between">
+          <Input
+            className="max-w-fit"
+            placeholder="Type here"
+            value={inputValue}
+            onChange={(e) => handleChange(e.target.value)}
+            onKeyDown={onKeyDown}
+            variant="filled"
+            onFocus={() => setIsCurrentShown(true)}
+            onBlur={() => setIsCurrentShown(false)}
+            autoFocus
           />
-        );
-      })}
-    </div>
-  );
-};
 
-interface INavigation {
-  onChange: () => void;
-}
+          <Navigation onChange={resetExercise} />
+        </div>
 
-const Navigation: FC<INavigation> = ({ onChange }) => {
-  const next = () => {
-    Store.next();
-    onChange();
-  };
-  const back = () => {
-    Store.back();
-    onChange();
-  };
-  const reset = () => {
-    Store.reset();
-    onChange();
-  };
-  return (
-    <div className="flex gap-2">
-      <Button onClick={reset} size="sm">
-        back to the start
-      </Button>
-      <IconButton
-        onClick={back}
-        aria-label="previous exercise"
-        icon={<ArrowBackIcon boxSize={5} />}
-        size="sm"
-      />
-      <IconButton
-        onClick={next}
-        aria-label="next exercise"
-        icon={<ArrowForwardIcon boxSize={5} />}
-        size="sm"
-      />
+        {Store.getIsSimpleBackspaceIgnored() && (
+          <div className="text-sm">
+            <div> {`Only "shift / alt + backspace" allowed`}</div>
+            <div>{`This can be turned off in the settings.`}</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

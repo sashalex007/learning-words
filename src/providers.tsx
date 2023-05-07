@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import chakraTheme from "@chakra-ui/theme";
 
-const { Button, Textarea, Input, Tabs } = chakraTheme.components;
+const { Button, Switch, Textarea, Input, Tabs } = chakraTheme.components;
 
 export const theme = extendBaseTheme({
   components: {
@@ -18,6 +18,7 @@ export const theme = extendBaseTheme({
     Textarea,
     Input,
     Tabs,
+    Switch,
   },
   fonts: {
     body: "Roboto Mono, sans-serif",
