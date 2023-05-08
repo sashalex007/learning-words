@@ -1,16 +1,24 @@
 "use client";
 
-import { IconButton, createIcon, useColorMode } from "@chakra-ui/react";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { IconButton, Link, createIcon, useColorMode } from "@chakra-ui/react";
+import { SunIcon, MoonIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { FC } from "react";
 
 export const Header: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  // TODO: Adds github link
   return (
     <header className="flex items-center w-full p-4 gap-3 max-w-4xl mx-auto">
       <KeyboardIcon boxSize={8} />
       <div>Learning Words</div>
+
+      <Link
+        className="text-sm ml-auto flex items-center gap-1"
+        href="https://github.com/Alounv/learning-words"
+        isExternal
+      >
+        Github
+        <ExternalLinkIcon />
+      </Link>
 
       <IconButton
         onClick={toggleColorMode}
@@ -18,7 +26,6 @@ export const Header: FC = () => {
         icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
         variant="ghost"
         size="sm"
-        className="ml-auto"
       />
     </header>
   );
