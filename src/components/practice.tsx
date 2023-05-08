@@ -6,6 +6,17 @@ import { Input } from "@chakra-ui/react";
 import { Words } from "./words";
 import { Navigation } from "./navigation";
 
+// TODO: (nice to have)  Add tada animation if learningCount decrease from 1 to 0
+
+const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+  const { key, metaKey, shiftKey, altKey, ctrlKey } = e;
+  if (key !== "Backspace") return;
+  if (!Store.getIsSimpleBackspaceIgnored()) return;
+  if (metaKey || shiftKey || altKey || ctrlKey) return;
+
+  e.preventDefault();
+};
+
 export const Practice: FC = () => {
   const [textWords, setTextWords] = useState<{
     words: string[];
@@ -22,8 +33,6 @@ export const Practice: FC = () => {
     Store.getLearningWords().size
   );
   const [isCurrentShown, setIsCurrentShown] = useState(false);
-
-  // TODO: (nice to have)  Add tada animation if learningCount decrease from 1 to 0
 
   const resetExercise = () => {
     setTextWords(Store.getTextWords());
@@ -72,15 +81,6 @@ export const Practice: FC = () => {
     }
 
     setIndex((i) => i + 1);
-  };
-
-  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    const { key, metaKey, shiftKey, altKey, ctrlKey } = e;
-    if (key !== "Backspace") return;
-    if (!Store.getIsSimpleBackspaceIgnored()) return;
-    if (metaKey || shiftKey || altKey || ctrlKey) return;
-
-    e.preventDefault();
   };
 
   return (

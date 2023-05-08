@@ -27,6 +27,15 @@ export namespace Store {
   export const setSize = (value: number): void => set("size", value);
 
   /*
+   * previousCount
+   */
+  export const getPreviousCount = (): number =>
+    get("previous-words-count") || PREVIOUS_WORD_COUNT;
+
+  export const setPreviousCount = (value: number): void =>
+    set("previous-words-count", value);
+
+  /*
    * learning size
    */
   export const getLearningSize = (): number =>

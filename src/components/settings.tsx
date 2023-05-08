@@ -1,11 +1,17 @@
 "use client";
 
-import { DEFAULT_SIZE, DEFAULT_TEXT, DEFAULT_LEARNING_SIZE } from "@/constant";
+import {
+  DEFAULT_SIZE,
+  DEFAULT_TEXT,
+  DEFAULT_LEARNING_SIZE,
+  PREVIOUS_WORD_COUNT,
+} from "@/constant";
 import { Store } from "@/stores";
 import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  IconButton,
   Input,
   Switch,
   Textarea,
@@ -15,15 +21,20 @@ import { FC, ReactNode, useEffect, useState } from "react";
 
 export const Settings: FC = () => {
   const color = useColorModeValue("gray.700", "gray.300");
+
   const [text, setText] = useState(Store.getText());
+
   const [size, setSize] = useState(Store.getSize());
   const [learningSize, setLearningSize] = useState(Store.getLearningSize());
+  const [previousCount, setPreviousCount] = useState(Store.getPreviousCount());
+
   const [isSimpleBackspaceIgnored, setIsSimpleBackspaceIgnored] = useState(
     Store.getIsSimpleBackspaceIgnored()
   );
 
   useEffect(() => Store.setSize(size), [size]);
-  useEffect(() => Store.setLearningSize(size), [size]);
+  useEffect(() => Store.setLearningSize(learningSize), [learningSize]);
+  useEffect(() => Store.setPreviousCount(previousCount), [previousCount]);
 
   useEffect(() => {
     Store.setIsSimpleBackspaceIgnored(isSimpleBackspaceIgnored);
@@ -40,7 +51,6 @@ export const Settings: FC = () => {
     <div className="flex flex-col gap-4">
       <Section
         title="Training text"
-        isInline={false}
         instructions="You can set any text you want to train on (list of words, articles, code, etc.)"
         input={
           <Textarea
@@ -82,7 +92,7 @@ export const Settings: FC = () => {
         }
       />
 
-      <Section
+      <InlineSection
         title="Number of words per exercise"
         input={
           <Input
@@ -91,18 +101,20 @@ export const Settings: FC = () => {
             onChange={(e) => setSize(parseInt(e.target.value))}
             variant="filled"
             color={color}
-            className="max-w-fit"
+            className="w-24"
           />
         }
         instructions="Words from the text to type per exercise"
         button={
-          <Button onClick={() => setSize(DEFAULT_SIZE)} size="sm">
-            {`Reset to default (${DEFAULT_SIZE})`}
-          </Button>
+          <IconButton
+            onClick={() => setSize(DEFAULT_SIZE)}
+            aria-label="Reset to default"
+            icon={<RepeatIcon />}
+          />
         }
       />
 
-      <Section
+      <InlineSection
         title="Max number of learning words per exercise"
         input={
           <Input
@@ -111,18 +123,42 @@ export const Settings: FC = () => {
             onChange={(e) => setLearningSize(parseInt(e.target.value))}
             variant="filled"
             color={color}
-            className="max-w-fit"
+            className="w-24"
           />
         }
         instructions="Learning words to type at the beginning of each exercise"
         button={
-          <Button onClick={() => setSize(DEFAULT_LEARNING_SIZE)} size="sm">
-            {`Reset to default (${DEFAULT_LEARNING_SIZE})`}
-          </Button>
+          <IconButton
+            onClick={() => setLearningSize(DEFAULT_LEARNING_SIZE)}
+            aria-label="Reset to default"
+            icon={<RepeatIcon />}
+          />
         }
       />
 
-      <Section
+      <InlineSection
+        title="Number of previous words shown"
+        input={
+          <Input
+            value={previousCount}
+            type="number"
+            onChange={(e) => setPreviousCount(parseInt(e.target.value))}
+            variant="filled"
+            color={color}
+            className="w-24"
+          />
+        }
+        instructions="Number of words shown from the previous exercise"
+        button={
+          <IconButton
+            onClick={() => setPreviousCount(PREVIOUS_WORD_COUNT)}
+            aria-label="Reset to default"
+            icon={<RepeatIcon />}
+          />
+        }
+      />
+
+      <InlineSection
         title="Ignore simple backspace"
         instructions="Forces you to delete the whole world in case of mistake (alt + backspace)"
         input={
@@ -132,7 +168,6 @@ export const Settings: FC = () => {
               setIsSimpleBackspaceIgnored(!isSimpleBackspaceIgnored)
             }
             color={color}
-            className="max-w-fit"
           />
         }
       />
@@ -145,20 +180,9 @@ const Section: FC<{
   input: ReactNode;
   instructions: string;
   button?: ReactNode;
-  isInline?: boolean;
-}> = ({ title, isInline = true, instructions, input, button }) => {
+}> = ({ title, instructions, input, button }) => {
   const color = useColorModeValue("gray.700", "gray.300");
-  return isInline ? (
-    <div className={`mt-4 flex flex-col gap-3`}>
-      <Box className="text-lg" color={color}>
-        {title}
-      </Box>
-      <div className="flex items-center justify-between gap-4 h-4">
-        <Box>{instructions}</Box>
-        {input}
-      </div>
-    </div>
-  ) : (
+  return (
     <div className={`mt-4 flex flex-col gap-3`}>
       <Box className="text-lg" color={color}>
         {title}
@@ -166,6 +190,27 @@ const Section: FC<{
       <Box>{instructions}</Box>
       {input}
       {button}
+    </div>
+  );
+};
+
+const InlineSection: FC<{
+  title: string;
+  input: ReactNode;
+  instructions: string;
+  button?: ReactNode;
+}> = ({ title, instructions, input, button }) => {
+  const color = useColorModeValue("gray.700", "gray.300");
+  return (
+    <div className={`mt-4 flex flex-col gap-3`}>
+      <Box className="text-lg" color={color}>
+        {title}
+      </Box>
+      <div className="flex items-center justify-between gap-4 h-4">
+        <div className="flex-1">{instructions}</div>
+        <div>{button}</div>
+        <div>{input}</div>
+      </div>
     </div>
   );
 };
