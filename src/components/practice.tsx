@@ -7,11 +7,14 @@ import { Words } from "./words";
 import { Navigation } from "./navigation";
 
 export const Practice: FC = () => {
-  const [words, setWords] = useState<string[]>(Store.getExerciseWords());
+  const [textWords, setTextWords] = useState<{
+    words: string[];
+    previousWords: string[];
+  }>(Store.getTextWords());
   const [practiceWords, setPracticeWords] = useState<string[]>(
-    Store.getExerciseLearningWords()
+    Store.getPracticeWords()
   );
-  const allWords = [...practiceWords, ...words];
+  const allWords = [...practiceWords, ...textWords.words];
   const [index, setIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [errors, setErrors] = useState(new Set<number>());
@@ -23,8 +26,8 @@ export const Practice: FC = () => {
   // TODO: (nice to have)  Add tada animation if learningCount decrease from 1 to 0
 
   const resetExercise = () => {
-    setWords(Store.getExerciseWords());
-    setPracticeWords(Store.getExerciseLearningWords());
+    setTextWords(Store.getTextWords());
+    setPracticeWords(Store.getPracticeWords());
     setIndex(0);
     setInputValue("");
     setErrors(new Set<number>());
@@ -85,16 +88,20 @@ export const Practice: FC = () => {
       <div>You have {learningCount} learning words</div>
 
       <div className="flex flex-col gap-4">
-        <Words
-          words={practiceWords}
-          index={index}
-          isCurrentShown={isCurrentShown}
-          errors={errors}
-          learningWords={learningWords}
-        />
+        {!!practiceWords.length && (
+          <Words
+            hasBrackets
+            words={practiceWords}
+            index={index}
+            isCurrentShown={isCurrentShown}
+            errors={errors}
+            learningWords={learningWords}
+          />
+        )}
 
         <Words
-          words={words}
+          previousWords={textWords.previousWords}
+          words={textWords.words}
           initialIndex={practiceWords.length}
           index={index}
           isCurrentShown={isCurrentShown}

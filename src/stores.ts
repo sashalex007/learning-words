@@ -1,4 +1,9 @@
-import { DEFAULT_TEXT, DEFAULT_SIZE, DEFAULT_LEARNING_SIZE } from "./constant";
+import {
+  DEFAULT_TEXT,
+  DEFAULT_SIZE,
+  DEFAULT_LEARNING_SIZE,
+  PREVIOUS_WORD_COUNT,
+} from "./constant";
 import { get, set } from "./storage";
 
 export namespace Store {
@@ -66,25 +71,29 @@ export namespace Store {
   /*
    * exercise words
    */
-  const getExerciseWordsFromText = (
-    text: string,
-    skip: number,
-    limit: number
-  ) => {
+  const getWordsFromText = (text: string, skip: number, limit: number) => {
     return text
       .split(/[ :\n]/)
       .slice(skip, skip + limit)
       .filter(Boolean);
   };
 
-  export const getExerciseWords = () => {
+  export const getTextWords = () => {
     const progress = getProgress();
     const text = getText();
     const size = getSize();
-    return getExerciseWordsFromText(text, progress, size);
+    const previousCount = PREVIOUS_WORD_COUNT;
+    return {
+      words: getWordsFromText(text, progress, size),
+      previousWords: getWordsFromText(
+        text,
+        progress - previousCount,
+        previousCount
+      ),
+    };
   };
 
-  export const getExerciseLearningWords = () => {
+  export const getPracticeWords = () => {
     const learningSize = getLearningSize();
     return getWorseLearningWords(learningSize);
   };

@@ -103,7 +103,7 @@ export const Settings: FC = () => {
       />
 
       <Section
-        title="Number of learning words per exercise"
+        title="Max number of learning words per exercise"
         input={
           <Input
             value={learningSize}

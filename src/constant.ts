@@ -4,3 +4,4 @@ Circumambulate the city of a dreamy Sabbath afternoon. Go from Corlears Hook to 
 
 export const DEFAULT_SIZE = 30;
 export const DEFAULT_LEARNING_SIZE = 10;
+export const PREVIOUS_WORD_COUNT = 5;

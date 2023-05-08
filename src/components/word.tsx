@@ -68,14 +68,14 @@ export const Word: FC<{
   isPast?: boolean;
   isCurrent?: boolean;
   isError?: boolean;
-  learningCount: number;
+  learningCount?: number;
   className?: string;
 }> = ({
   word,
   isPast = false,
   isCurrent = false,
   isError = false,
-  learningCount,
+  learningCount = 0,
   className,
 }) => {
   const { color, cls } = useWordStyle({
