@@ -1,4 +1,4 @@
-import { DEFAULT_TEXT, DEFAULT_SIZE } from "./constant";
+import { DEFAULT_TEXT, DEFAULT_SIZE, DEFAULT_LEARNING_SIZE } from "./constant";
 import { get, set } from "./storage";
 
 export namespace Store {
@@ -22,7 +22,16 @@ export namespace Store {
   export const setSize = (value: number): void => set("size", value);
 
   /*
-   * size
+   * learning size
+   */
+  export const getLearningSize = (): number =>
+    get("learning-size") || DEFAULT_LEARNING_SIZE;
+
+  export const setLearningSize = (value: number): void =>
+    set("learning-size", value);
+
+  /*
+   * ignore simple backspace
    */
   export const getIsSimpleBackspaceIgnored = (): boolean =>
     get("ignore-simple-backspace") || false;
@@ -68,18 +77,16 @@ export namespace Store {
       .filter(Boolean);
   };
 
-  const getExerciseWordsFromProgress = (progress: number) => {
-    const text = getText();
-    const size = getSize();
-    const words = getExerciseWordsFromText(text, progress, size);
-    const learningWordsCount = Math.max(10, size - words.length);
-    const learningWords = getWorseLearningWords(learningWordsCount);
-    return [...learningWords, ...words];
-  };
-
   export const getExerciseWords = () => {
     const progress = getProgress();
-    return getExerciseWordsFromProgress(progress);
+    const text = getText();
+    const size = getSize();
+    return getExerciseWordsFromText(text, progress, size);
+  };
+
+  export const getExerciseLearningWords = () => {
+    const learningSize = getLearningSize();
+    return getWorseLearningWords(learningSize);
   };
 
   /*

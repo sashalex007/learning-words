@@ -1,6 +1,6 @@
 "use client";
 
-import { DEFAULT_SIZE, DEFAULT_TEXT } from "@/constant";
+import { DEFAULT_SIZE, DEFAULT_TEXT, DEFAULT_LEARNING_SIZE } from "@/constant";
 import { Store } from "@/stores";
 import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
 import {
@@ -17,25 +17,20 @@ export const Settings: FC = () => {
   const color = useColorModeValue("gray.700", "gray.300");
   const [text, setText] = useState(Store.getText());
   const [size, setSize] = useState(Store.getSize());
+  const [learningSize, setLearningSize] = useState(Store.getLearningSize());
   const [isSimpleBackspaceIgnored, setIsSimpleBackspaceIgnored] = useState(
     Store.getIsSimpleBackspaceIgnored()
   );
 
-  useEffect(() => {
-    Store.setSize(size);
-  }, [size]);
+  useEffect(() => Store.setSize(size), [size]);
+  useEffect(() => Store.setLearningSize(size), [size]);
 
   useEffect(() => {
     Store.setIsSimpleBackspaceIgnored(isSimpleBackspaceIgnored);
   }, [isSimpleBackspaceIgnored]);
 
-  const save = () => {
-    Store.setText(text);
-  };
-
-  const reset = () => {
-    setText(Store.getText());
-  };
+  const save = () => Store.setText(text);
+  const reset = () => setText(Store.getText());
 
   // TODO: Max number of learning words at the beginning
   // TODO: Randomize learning words
@@ -99,10 +94,30 @@ export const Settings: FC = () => {
             className="max-w-fit"
           />
         }
-        instructions="(not including learning words repetitons)"
+        instructions="Words from the text to type per exercise"
         button={
           <Button onClick={() => setSize(DEFAULT_SIZE)} size="sm">
             {`Reset to default (${DEFAULT_SIZE})`}
+          </Button>
+        }
+      />
+
+      <Section
+        title="Number of learning words per exercise"
+        input={
+          <Input
+            value={learningSize}
+            type="number"
+            onChange={(e) => setLearningSize(parseInt(e.target.value))}
+            variant="filled"
+            color={color}
+            className="max-w-fit"
+          />
+        }
+        instructions="Learning words to type at the beginning of each exercise"
+        button={
+          <Button onClick={() => setSize(DEFAULT_LEARNING_SIZE)} size="sm">
+            {`Reset to default (${DEFAULT_LEARNING_SIZE})`}
           </Button>
         }
       />

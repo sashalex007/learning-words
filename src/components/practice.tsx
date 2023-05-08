@@ -8,6 +8,10 @@ import { Navigation } from "./navigation";
 
 export const Practice: FC = () => {
   const [words, setWords] = useState<string[]>(Store.getExerciseWords());
+  const [practiceWords, setPracticeWords] = useState<string[]>(
+    Store.getExerciseLearningWords()
+  );
+  const allWords = [...practiceWords, ...words];
   const [index, setIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [errors, setErrors] = useState(new Set<number>());
@@ -20,6 +24,7 @@ export const Practice: FC = () => {
 
   const resetExercise = () => {
     setWords(Store.getExerciseWords());
+    setPracticeWords(Store.getExerciseLearningWords());
     setIndex(0);
     setInputValue("");
     setErrors(new Set<number>());
@@ -31,7 +36,7 @@ export const Practice: FC = () => {
   };
 
   const learningWords = Store.getLearningWords();
-  const currentWord = words[index];
+  const currentWord = allWords[index];
 
   const handleChange = (value: string) => {
     if (value.slice(-1) === " " && value.trim() === currentWord.trim()) {
@@ -58,7 +63,7 @@ export const Practice: FC = () => {
     Store.addCorrection(currentWord);
     setLearningCount(Store.getLearningWords().size);
 
-    if (index === words.length - 1) {
+    if (index === allWords.length - 1) {
       next();
       return;
     }
@@ -79,13 +84,24 @@ export const Practice: FC = () => {
     <div className="flex flex-col gap-12 mt-8">
       <div>You have {learningCount} learning words</div>
 
-      <Words
-        words={words}
-        index={index}
-        isCurrentShown={isCurrentShown}
-        errors={errors}
-        learningWords={learningWords}
-      />
+      <div className="flex flex-col gap-4">
+        <Words
+          words={practiceWords}
+          index={index}
+          isCurrentShown={isCurrentShown}
+          errors={errors}
+          learningWords={learningWords}
+        />
+
+        <Words
+          words={words}
+          initialIndex={practiceWords.length}
+          index={index}
+          isCurrentShown={isCurrentShown}
+          errors={errors}
+          learningWords={learningWords}
+        />
+      </div>
 
       <div className="flex gap-3 flex-col">
         <div className="flex flex-wrap gap-4 items-center justify-between">
