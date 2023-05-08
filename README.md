@@ -1,34 +1,15 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Learning words
 
-## Getting Started
+This app helps you improves you accuracy while typing. You can try it here: [https://words-to-learn.vercel.app/](https://words-to-learn.vercel.app/).
 
-First, run the development server:
+Is is heavily inspired from https://problemwords.com/ but allows you to train on any text you choose.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## How it works
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Add the text you want to train on.
+2. Start typing, each time you make a mistake, the word is saved as a `LearningWord`.
+3. Learning words will be added at the beginning of each exercices.
+4. Once you typed them correctly a certain amount of times, they are removed.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![words-to-learn vercel app_(Surface Duo) (1)](https://user-images.githubusercontent.com/34238160/236792873-9e580fa5-6990-4a42-af8e-a4878a7ad553.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
