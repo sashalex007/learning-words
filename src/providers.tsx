@@ -31,10 +31,11 @@ export const theme = extendBaseTheme({
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <CacheProvider>
         <ChakraBaseProvider theme={theme}>{children}</ChakraBaseProvider>
       </CacheProvider>
+
+      <ColorModeScript initialColorMode="dark" />
     </>
   );
 }
