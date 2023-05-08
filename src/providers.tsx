@@ -24,7 +24,7 @@ export const theme = extendBaseTheme({
     body: "Roboto Mono, sans-serif",
   },
   initialColorMode: "dark",
-  useSystemColorMode: false,
+  useSystemColorMode: true,
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {

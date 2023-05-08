@@ -1,5 +1,6 @@
 import { Providers } from "@/providers";
 import "./globals.css";
+import { Layout } from "@/components/layout";
 
 export const metadata = {
   title: "Learning words",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body>{children}</body>
+        <body>
+          <Layout>{children}</Layout>
+        </body>
       </Providers>
     </html>
   );
