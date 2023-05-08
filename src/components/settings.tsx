@@ -49,7 +49,7 @@ export const Settings: FC = () => {
             placeholder="Enter the text you want to train on"
             variant="filled"
             color={color}
-            rows={10}
+            rows={5}
           />
         }
         button={

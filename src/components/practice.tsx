@@ -87,7 +87,7 @@ export const Practice: FC = () => {
     <div className="flex flex-col gap-12 mt-8">
       <div>You have {learningCount} learning words</div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         {!!practiceWords.length && (
           <Words
             hasBrackets
@@ -110,7 +110,7 @@ export const Practice: FC = () => {
         />
       </div>
 
-      <div className="flex gap-3 flex-col">
+      <div className="flex gap-3 flex-col mt-4">
         <div className="flex flex-wrap gap-4 items-center justify-between">
           <Input
             className="max-w-fit"

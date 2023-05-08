@@ -3,7 +3,7 @@
 import { Store } from "@/stores";
 import { FC, ReactNode, useState } from "react";
 import { Word } from "./word";
-import { Button, IconButton } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 
 export const LearningWords: FC = () => {
@@ -22,10 +22,6 @@ export const LearningWords: FC = () => {
   words.sort(([, a], [, b]) => b - a);
   return (
     <Layout>
-      <Button onClick={render} size="sm" className="mb-4">
-        Refresh list
-      </Button>
-
       {words.map(([word, count]) => {
         return (
           <div key={word} className="flex items-center gap-4 w-96 max-w-full">

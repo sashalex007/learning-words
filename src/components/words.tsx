@@ -23,7 +23,7 @@ export const Words: FC<IWords> = ({
   hasBrackets = false,
 }) => {
   return (
-    <div className="flex gap-3 flex-wrap text-xl font-medium mb-4">
+    <div className="flex gap-3 flex-wrap text-xl font-medium">
       {hasBrackets && <span>[</span>}
       {previousWords.map((word, i) => {
         return <Word key={word + i} word={word} isPast={true} />;
