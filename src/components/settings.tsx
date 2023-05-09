@@ -2,9 +2,11 @@
 
 import {
   DEFAULT_SIZE,
-  DEFAULT_TEXT,
+  MOBYDICK,
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
+  ENGLISH_1K,
+  FRENCH_1K,
 } from "@/constant";
 import { Store } from "@/stores";
 import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
@@ -18,6 +20,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FC, ReactNode, useEffect, useState } from "react";
+
+const randomize = (input: string) => {
+  const text = input.replace(/(\r\n|\n|\r)/gm, " ");
+  const words = text.split(" ");
+  const randomized = words.sort(() => Math.random() - 0.5);
+  return randomized.join(" ");
+};
 
 export const Settings: FC = () => {
   const color = useColorModeValue("gray.700", "gray.300");
@@ -43,10 +52,6 @@ export const Settings: FC = () => {
   const save = () => Store.setText(text);
   const reset = () => setText(Store.getText());
 
-  // TODO: Max number of learning words at the beginning
-  // TODO: Randomize learning words
-  // TODO: Add a button to 1000 most common words english
-
   return (
     <div className="flex flex-col gap-4">
       <Section
@@ -64,7 +69,13 @@ export const Settings: FC = () => {
         }
         button={
           <div className="flex gap-4 justify-end">
-            <Button onClick={() => setText(DEFAULT_TEXT)} size="sm">
+            <Button onClick={() => setText(randomize(ENGLISH_1K))} size="sm">
+              English 1k
+            </Button>
+            <Button onClick={() => setText(randomize(FRENCH_1K))} size="sm">
+              French 1k
+            </Button>
+            <Button onClick={() => setText(MOBYDICK)} size="sm">
               First paragraph of Moby Dick
             </Button>
 

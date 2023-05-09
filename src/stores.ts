@@ -1,5 +1,5 @@
 import {
-  DEFAULT_TEXT,
+  MOBYDICK,
   DEFAULT_SIZE,
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
@@ -10,7 +10,7 @@ export namespace Store {
   /*
    * text
    */
-  export const getText = (): string => get("text") || DEFAULT_TEXT;
+  export const getText = (): string => get("text") || MOBYDICK;
 
   export const setText = (value: string): void => set("text", value);
 
