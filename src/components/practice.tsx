@@ -84,7 +84,7 @@ export const Practice: FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-12 mt-8">
+    <div className="flex flex-col gap-12">
       <div>You have {learningCount} learning words</div>
 
       <div className="flex flex-col gap-6">

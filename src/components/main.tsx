@@ -40,18 +40,24 @@ export const Main: FC = () => {
   };
   const borderColor = useColorModeValue("gray.200", "gray.700");
   return (
-    <Tabs isLazy variant="enclosed" index={index} onChange={handleChange}>
+    <Tabs
+      className="flex-1 flex flex-col"
+      isLazy
+      variant="enclosed"
+      index={index}
+      onChange={handleChange}
+    >
       <TabList borderColor={borderColor}>
         {tabs.map(({ tab }) => (
           <Tab key={tab}>{tab}</Tab>
         ))}
       </TabList>
 
-      <TabPanels>
+      <TabPanels className="flex-1 flex flex-col justify-center pb-52">
         {tabs.map(({ tab }, index) => {
           const Component = TabsComponent[index];
           return (
-            <TabPanel className="mt-8" key={tab}>
+            <TabPanel key={tab}>
               <Component />
             </TabPanel>
           );

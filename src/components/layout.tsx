@@ -6,7 +6,7 @@ export const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <Theme>
       <Header />
-      <main className="max-w-4xl min-h-full px-4 pt-12 pb-8 mx-auto">
+      <main className="flex-1 w-full max-w-4xl min-h-full p-4 flex flex-col">
         {children}
       </main>
     </Theme>
