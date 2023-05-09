@@ -6,13 +6,10 @@ import { Input } from "@chakra-ui/react";
 import { Words } from "./words";
 import { Navigation } from "./navigation";
 
-// TODO: (nice to have)  Add tada animation if learningCount decrease from 1 to 0
-
 const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
-  const { key, metaKey, shiftKey, altKey, ctrlKey } = e;
+  const { key, altKey } = e;
   if (key !== "Backspace") return;
-  if (!Store.getIsSimpleBackspaceIgnored()) return;
-  if (metaKey || shiftKey || altKey || ctrlKey) return;
+  if (!Store.getIsSimpleBackspaceIgnored() || altKey) return;
 
   e.preventDefault();
 };
@@ -135,7 +132,7 @@ export const Practice: FC = () => {
 
         {Store.getIsSimpleBackspaceIgnored() && (
           <div className="text-sm">
-            <div> {`Only "shift / alt + backspace" allowed`}</div>
+            <div> {`Only "alt + backspace" allowed`}</div>
             <div>{`This can be turned off in the settings.`}</div>
           </div>
         )}
