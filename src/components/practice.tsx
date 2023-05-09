@@ -1,7 +1,7 @@
 "use client";
 
 import { Store } from "@/stores";
-import { FC, KeyboardEventHandler, useState } from "react";
+import { FC, KeyboardEventHandler, Suspense, useState } from "react";
 import { Input } from "@chakra-ui/react";
 import { Words } from "./words";
 import { Navigation } from "./navigation";
@@ -85,29 +85,35 @@ export const Practice: FC = () => {
 
   return (
     <div className="flex flex-col gap-12">
-      <div>You have {learningCount} learning words</div>
+      <div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <span>You have {learningCount} learning words </span>
+        </Suspense>
+      </div>
 
       <div className="flex flex-col gap-6">
-        {!!practiceWords.length && (
+        <Suspense fallback={<div>Loading...</div>}>
+          {!!practiceWords.length && (
+            <Words
+              hasBrackets
+              words={practiceWords}
+              index={index}
+              isCurrentShown={isCurrentShown}
+              errors={errors}
+              learningWords={learningWords}
+            />
+          )}
+
           <Words
-            hasBrackets
-            words={practiceWords}
+            previousWords={textWords.previousWords}
+            words={textWords.words}
+            initialIndex={practiceWords.length}
             index={index}
             isCurrentShown={isCurrentShown}
             errors={errors}
             learningWords={learningWords}
           />
-        )}
-
-        <Words
-          previousWords={textWords.previousWords}
-          words={textWords.words}
-          initialIndex={practiceWords.length}
-          index={index}
-          isCurrentShown={isCurrentShown}
-          errors={errors}
-          learningWords={learningWords}
-        />
+        </Suspense>
       </div>
 
       <div className="flex gap-3 flex-col mt-4">

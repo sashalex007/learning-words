@@ -1,11 +1,12 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 interface IWordStyle {
   isPast: boolean;
   isCurrent: boolean;
   isError: boolean;
   learningCount: number;
+  isFlashing: boolean;
 }
 
 const useWordStyle = ({
@@ -13,6 +14,7 @@ const useWordStyle = ({
   isCurrent,
   isError,
   learningCount,
+  isFlashing,
 }: IWordStyle): { color: string; cls: string } => {
   let color = useColorModeValue("gray.900", "gray.100");
   const pastColor = useColorModeValue("gray.300", "gray.600");
@@ -23,6 +25,7 @@ const useWordStyle = ({
   const learning4Color = useColorModeValue("blue.500", "cyan.500");
   const learning5Color = useColorModeValue("blue.600", "cyan.400");
   const learning6Color = useColorModeValue("blue.700", "cyan.300");
+  const flashColor = useColorModeValue("blue.800", "cyan.200");
 
   let cls = "transition-all ";
 
@@ -60,6 +63,10 @@ const useWordStyle = ({
     }
   }
 
+  if (isFlashing) {
+    color = flashColor;
+  }
+
   return { color, cls };
 };
 
@@ -78,11 +85,36 @@ export const Word: FC<{
   learningCount = 0,
   className,
 }) => {
+  const [previousState, setPreviousState] = useState({
+    isCurrent,
+    learningCount,
+  });
+  const [isFlashing, setIsFlashing] = useState(false);
+
+  const flash = () => {
+    setIsFlashing(true);
+    setTimeout(() => setIsFlashing(false), 200);
+  };
+
+  useEffect(() => {
+    if (
+      !isCurrent &&
+      previousState.isCurrent &&
+      !isError &&
+      previousState.learningCount > 0
+    ) {
+      flash();
+    }
+    setPreviousState({ isCurrent, learningCount });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCurrent, isError, learningCount]);
+
   const { color, cls } = useWordStyle({
     isPast,
     isCurrent,
     isError,
     learningCount,
+    isFlashing,
   });
 
   return (
