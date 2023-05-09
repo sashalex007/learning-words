@@ -103,8 +103,20 @@ export namespace Store {
   };
 
   export const getPracticeWords = () => {
-    const learningSize = getLearningSize();
-    return getWorseLearningWords(learningSize);
+    // select number of words to practice
+    const count = getLearningSize();
+
+    // get the list of words to practice
+    const record = getLearningWordsAsRecord();
+    const list = Object.entries(record);
+    list.sort(([, a], [, b]) => b - a);
+    const words = list.slice(0, count);
+
+    // double the highest error count
+    return words.flatMap(([word, count]) => {
+      if (count > 3) return [word, word];
+      return [word];
+    });
   };
 
   /*
@@ -125,13 +137,6 @@ export namespace Store {
   export const getLearningWords = (): LearningWords => {
     const record = getLearningWordsAsRecord();
     return new Map(Object.entries(record));
-  };
-
-  const getWorseLearningWords = (count: number): string[] => {
-    const record = getLearningWordsAsRecord();
-    const list = Object.entries(record);
-    list.sort(([, a], [, b]) => b - a);
-    return list.slice(0, count).map(([word]) => word);
   };
 
   export const addLearningWord = (word: string): void => {
