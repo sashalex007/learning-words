@@ -3,7 +3,7 @@ import "./globals.css";
 import { Layout } from "@/components/layout";
 
 export const metadata = {
-  title: "Learning words",
+  title: "Words to learn",
   description: "Improve your typing accuracy by focusing on the words you miss",
 };
 

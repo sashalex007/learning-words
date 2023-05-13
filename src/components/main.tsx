@@ -17,10 +17,7 @@ import { LearningWords } from "./learning-words";
 const tabs: Tab[] = [
   { tab: "Practice", href: "/" },
   { tab: "Settings", href: "/settings" },
-  {
-    tab: "Learning Words",
-    href: "/learning-words",
-  },
+  { tab: "Words to learn", href: "/words" },
 ];
 
 export interface Tab {

@@ -9,11 +9,11 @@ export const Header: FC = () => {
   return (
     <header className="flex items-center w-full p-4 gap-3 max-w-4xl mx-auto">
       <KeyboardIcon boxSize={8} />
-      <div>Learning Words</div>
+      <div>Words to learn</div>
 
       <Link
         className="text-sm ml-auto flex items-center gap-1"
-        href="https://github.com/Alounv/learning-words"
+        href="https://github.com/Alounv/words"
         isExternal
       >
         Github

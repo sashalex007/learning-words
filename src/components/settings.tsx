@@ -126,7 +126,7 @@ export const Settings: FC = () => {
       />
 
       <InlineSection
-        title="Max number of learning words per exercise"
+        title={`Max number of "words to learn" per exercise`}
         input={
           <Input
             value={learningSize}
@@ -137,7 +137,7 @@ export const Settings: FC = () => {
             className="w-24"
           />
         }
-        instructions="Learning words to type at the beginning of each exercise"
+        instructions={`"Words to learn" to type at the beginning of each exercise`}
         button={
           <IconButton
             onClick={() => setLearningSize(DEFAULT_LEARNING_SIZE)}
