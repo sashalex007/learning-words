@@ -2,10 +2,10 @@
 
 import { Store } from "@/stores";
 import { FC, KeyboardEventHandler, Suspense, useState } from "react";
-import { Box, Input } from "@chakra-ui/react";
 import { Words } from "./words";
 import { Navigation } from "./navigation";
-import { useLearningColors } from "./word";
+import { Input } from "@chakra-ui/react";
+import { CurrentLearningWords } from "./squares";
 
 const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
   const { key, altKey } = e;
@@ -44,6 +44,7 @@ export const Practice: FC = () => {
   };
 
   const currentWord = allWords[index];
+  const isError = errors.has(index);
 
   const handleChange = (value: string) => {
     if (value.slice(-1) === " " && value.trim() === currentWord.trim()) {
@@ -57,7 +58,7 @@ export const Practice: FC = () => {
     const isCorrect =
       currentWord.startsWith(word) || ["^", "¨"].includes(word.slice(-1));
 
-    if (!isCorrect) {
+    if (!isCorrect && !isError) {
       setErrors((e) => e.add(index));
       Store.addLearningWord(currentWord);
       setLearningWords(Store.getLearningWords());
@@ -67,8 +68,10 @@ export const Practice: FC = () => {
 
   const submitWord = () => {
     setInputValue("");
-    Store.addCorrection(currentWord);
-    setLearningWords(Store.getLearningWords());
+    if (!isError) {
+      Store.addCorrection(currentWord);
+      setLearningWords(Store.getLearningWords());
+    }
 
     if (index === allWords.length - 1) {
       next();
@@ -80,7 +83,7 @@ export const Practice: FC = () => {
 
   return (
     <div className="flex flex-col gap-12">
-      <CurrentLearningWords words={learningWords} />
+      <CurrentLearningWords words={learningWords} currentWord={currentWord} />
 
       <div className="flex flex-col gap-6">
         <Suspense fallback={<div>Loading...</div>}>
@@ -132,34 +135,5 @@ export const Practice: FC = () => {
         )}
       </div>
     </div>
-  );
-};
-
-const CurrentLearningWords: FC<{ words: Store.LearningWords }> = ({
-  words,
-}) => {
-  const squares = Array.from(words);
-  squares.sort((a, b) => b[1] - a[1]);
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="flex flex-wrap gap-1 items-center">
-        <span className="mr-4">You have {words.size} words to learn</span>
-        {squares.map(([_, score], i) => (
-          <Square key={i} score={score} />
-        ))}
-      </div>
-    </Suspense>
-  );
-};
-
-const Square: FC<{ score: number }> = ({ score }) => {
-  const color = useLearningColors(score);
-  return (
-    <Box
-      color={color}
-      className="transition-all h-4 w-4 rounded border-solid border border-current text-xs flex items-center justify-center"
-    >
-      {score}
-    </Box>
   );
 };
