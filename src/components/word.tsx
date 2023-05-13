@@ -1,6 +1,19 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { FC, useEffect, useState } from "react";
 
+export const useLearningColors = (learningCount: number) => {
+  const learningColors = [
+    useColorModeValue("blue.200", "cyan.800"),
+    useColorModeValue("blue.300", "cyan.700"),
+    useColorModeValue("blue.400", "cyan.600"),
+    useColorModeValue("blue.500", "cyan.500"),
+    useColorModeValue("blue.600", "cyan.400"),
+    useColorModeValue("blue.700", "cyan.300"),
+  ];
+
+  return learningColors[learningCount - 1];
+};
+
 interface IWordStyle {
   isPast: boolean;
   isCurrent: boolean;
@@ -19,13 +32,8 @@ const useWordStyle = ({
   let color = useColorModeValue("gray.900", "gray.100");
   const pastColor = useColorModeValue("gray.300", "gray.600");
   const errorColor = useColorModeValue("pink.500", "pink.400");
-  const learning1Color = useColorModeValue("blue.200", "cyan.800");
-  const learning2Color = useColorModeValue("blue.300", "cyan.700");
-  const learning3Color = useColorModeValue("blue.400", "cyan.600");
-  const learning4Color = useColorModeValue("blue.500", "cyan.500");
-  const learning5Color = useColorModeValue("blue.600", "cyan.400");
-  const learning6Color = useColorModeValue("blue.700", "cyan.300");
   const flashColor = useColorModeValue("blue.800", "cyan.200");
+  const learningColor = useLearningColors(learningCount);
 
   let cls = "transition-all ";
 
@@ -33,24 +41,7 @@ const useWordStyle = ({
 
   if (learningCount > 0) {
     cls += "font-bold ";
-    color = (() => {
-      switch (learningCount) {
-        case 1:
-          return learning1Color;
-        case 2:
-          return learning2Color;
-        case 3:
-          return learning3Color;
-        case 4:
-          return learning4Color;
-        case 5:
-          return learning5Color;
-        case 6:
-          return learning6Color;
-        default:
-          return "";
-      }
-    })();
+    color = learningColor;
   } else if (isPast) {
     color = pastColor;
   }
