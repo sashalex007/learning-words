@@ -84,7 +84,7 @@ export const Practice: FC = () => {
     <div className="flex flex-col gap-12">
       <div>
         <Suspense fallback={<div>Loading...</div>}>
-          <span>You have {learningCount} learning words </span>
+          <span>You have {learningCount} words to learn</span>
         </Suspense>
       </div>
 

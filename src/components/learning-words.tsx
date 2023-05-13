@@ -14,7 +14,7 @@ export const LearningWords: FC = () => {
   if (!words.length) {
     return (
       <Layout>
-        <div>You have no learning words yet.</div>
+        <div>{`You have no "words to learn" yet.`}</div>
       </Layout>
     );
   }
