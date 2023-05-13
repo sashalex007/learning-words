@@ -2,9 +2,10 @@
 
 import { Store } from "@/stores";
 import { FC, KeyboardEventHandler, Suspense, useState } from "react";
-import { Input } from "@chakra-ui/react";
+import { Box, Input } from "@chakra-ui/react";
 import { Words } from "./words";
 import { Navigation } from "./navigation";
+import { useLearningColors } from "./word";
 
 const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
   const { key, altKey } = e;
@@ -26,9 +27,7 @@ export const Practice: FC = () => {
   const [index, setIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [errors, setErrors] = useState(new Set<number>());
-  const [learningCount, setLearningCount] = useState(
-    Store.getLearningWords().size
-  );
+  const [learningWords, setLearningWords] = useState(Store.getLearningWords());
   const [isCurrentShown, setIsCurrentShown] = useState(false);
 
   const resetExercise = () => {
@@ -44,7 +43,6 @@ export const Practice: FC = () => {
     resetExercise();
   };
 
-  const learningWords = Store.getLearningWords();
   const currentWord = allWords[index];
 
   const handleChange = (value: string) => {
@@ -62,7 +60,7 @@ export const Practice: FC = () => {
     if (!isCorrect) {
       setErrors((e) => e.add(index));
       Store.addLearningWord(currentWord);
-      setLearningCount(Store.getLearningWords().size);
+      setLearningWords(Store.getLearningWords());
     }
     setInputValue(word);
   };
@@ -70,7 +68,7 @@ export const Practice: FC = () => {
   const submitWord = () => {
     setInputValue("");
     Store.addCorrection(currentWord);
-    setLearningCount(Store.getLearningWords().size);
+    setLearningWords(Store.getLearningWords());
 
     if (index === allWords.length - 1) {
       next();
@@ -82,11 +80,7 @@ export const Practice: FC = () => {
 
   return (
     <div className="flex flex-col gap-12">
-      <div>
-        <Suspense fallback={<div>Loading...</div>}>
-          <span>You have {learningCount} words to learn</span>
-        </Suspense>
-      </div>
+      <CurrentLearningWords words={learningWords} />
 
       <div className="flex flex-col gap-6">
         <Suspense fallback={<div>Loading...</div>}>
@@ -97,7 +91,7 @@ export const Practice: FC = () => {
               index={index}
               isCurrentShown={isCurrentShown}
               errors={errors}
-              learningWords={learningWords}
+              learningWords={Store.getLearningWords()}
             />
           )}
 
@@ -138,5 +132,34 @@ export const Practice: FC = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const CurrentLearningWords: FC<{ words: Store.LearningWords }> = ({
+  words,
+}) => {
+  const squares = Array.from(words);
+  squares.sort((a, b) => b[1] - a[1]);
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-wrap gap-1 items-center">
+        <span className="mr-4">You have {words.size} words to learn</span>
+        {squares.map(([_, score], i) => (
+          <Square key={i} score={score} />
+        ))}
+      </div>
+    </Suspense>
+  );
+};
+
+const Square: FC<{ score: number }> = ({ score }) => {
+  const color = useLearningColors(score);
+  return (
+    <Box
+      color={color}
+      className="transition-all h-4 w-4 rounded border-solid border border-current text-xs flex items-center justify-center"
+    >
+      {score}
+    </Box>
   );
 };

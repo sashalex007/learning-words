@@ -122,7 +122,7 @@ export namespace Store {
   /*
    * words
    */
-  type LearningWords = Map<string, number>;
+  export type LearningWords = Map<string, number>;
 
   export const getLearningWordsAsRecord = (): Record<string, number> => {
     return get("words") || {};
