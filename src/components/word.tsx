@@ -19,7 +19,6 @@ interface IWordStyle {
   isCurrent: boolean;
   isError: boolean;
   learningCount: number;
-  isFlashing: boolean;
 }
 
 const useWordStyle = ({
@@ -27,22 +26,22 @@ const useWordStyle = ({
   isCurrent,
   isError,
   learningCount,
-  isFlashing,
 }: IWordStyle): { color: string; cls: string } => {
   let color = useColorModeValue("gray.900", "gray.100");
-  const pastColor = useColorModeValue("gray.300", "gray.600");
+  const pastColor = useColorModeValue("gray.200", "gray.700");
   const errorColor = useColorModeValue("pink.500", "pink.400");
-  const flashColor = useColorModeValue("blue.800", "cyan.200");
   const learningColor = useLearningColors(learningCount);
 
-  let cls = "transition-all ";
+  let cls = "flex transition-all relative ";
 
   if (isCurrent) cls += "underline underline-offset-4 ";
 
   if (learningCount > 0) {
     cls += "font-bold ";
     color = learningColor;
-  } else if (isPast) {
+  }
+
+  if (isPast) {
     color = pastColor;
   }
 
@@ -52,10 +51,6 @@ const useWordStyle = ({
     } else {
       color = errorColor;
     }
-  }
-
-  if (isFlashing) {
-    color = flashColor;
   }
 
   return { color, cls };
@@ -79,24 +74,16 @@ export const Word: FC<{
   const [previousState, setPreviousState] = useState({
     isCurrent,
     learningCount,
+    isPast,
+    isError,
   });
-  const [isFlashing, setIsFlashing] = useState(false);
-
-  const flash = () => {
-    setIsFlashing(true);
-    setTimeout(() => setIsFlashing(false), 200);
-  };
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    if (
-      !isCurrent &&
-      previousState.isCurrent &&
-      !isError &&
-      previousState.learningCount > 0
-    ) {
-      flash();
+    if (!isCurrent && previousState.isCurrent) {
+      setIsDone(true);
     }
-    setPreviousState({ isCurrent, learningCount });
+    setPreviousState({ isCurrent, learningCount, isPast, isError });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCurrent, isError, learningCount]);
 
@@ -105,12 +92,50 @@ export const Word: FC<{
     isCurrent,
     isError,
     learningCount,
-    isFlashing,
+  });
+  const { color: previousColor } = useWordStyle({
+    isPast: previousState.isPast,
+    isCurrent: previousState.isCurrent,
+    isError: previousState.isError,
+    learningCount: previousState.learningCount,
   });
 
   return (
-    <Box className={cls + className} color={color}>
-      {word}
+    <Box className={cls + className} color={previousColor}>
+      {word.split("").map((char, i) => (
+        <Letter key={i} char={char} isDone={isDone} index={i} />
+      ))}
+      <Box color={color} className="absolute top-0">
+        {word}
+      </Box>
     </Box>
+  );
+};
+
+const Letter: FC<{ char: string; isDone: boolean; index: number }> = ({
+  char,
+  isDone,
+  index,
+}) => {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    if (isDone) {
+      setTimeout(() => setIsAnimated(true), index * 100);
+    }
+  }, [isDone, index]);
+
+  const animatedCls = `${
+    index % 2 === 0 ? "-translate-y-4" : "translate-y-4"
+  } opacity-0 -translate-x-2 rotate-180`;
+
+  return (
+    <div
+      className={`transition-all duration-1000 z-10 ${
+        isAnimated ? animatedCls : ""
+      }`}
+    >
+      {char}
+    </div>
   );
 };
