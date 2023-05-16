@@ -32,7 +32,7 @@ const useWordStyle = ({
   const errorColor = useColorModeValue("pink.500", "pink.400");
   const learningColor = useLearningColors(learningCount);
 
-  let cls = "flex transition-all relative ";
+  let cls = "";
 
   if (isCurrent) cls += "underline underline-offset-4 ";
 
@@ -60,19 +60,21 @@ export const Word: FC<{
   word: string;
   isPast?: boolean;
   isCurrent?: boolean;
+  isPreviousCurrent?: boolean;
   isError?: boolean;
   learningCount?: number;
   className?: string;
 }> = ({
   word,
   isPast = false,
+  isPreviousCurrent = false,
   isCurrent = false,
   isError = false,
   learningCount = 0,
   className,
 }) => {
-  const [previousState, setPreviousState] = useState({
-    isCurrent,
+  const [previousState] = useState({
+    isCurrent: isPreviousCurrent,
     learningCount,
     isPast,
     isError,
@@ -80,10 +82,9 @@ export const Word: FC<{
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    if (!isCurrent && previousState.isCurrent) {
+    if (!isCurrent && isPreviousCurrent) {
       setIsDone(true);
     }
-    setPreviousState({ isCurrent, learningCount, isPast, isError });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCurrent, isError, learningCount]);
 
@@ -93,7 +94,7 @@ export const Word: FC<{
     isError,
     learningCount,
   });
-  const { color: previousColor } = useWordStyle({
+  const { color: previousColor, cls: previousCls } = useWordStyle({
     isPast: previousState.isPast,
     isCurrent: previousState.isCurrent,
     isError: previousState.isError,
@@ -101,11 +102,21 @@ export const Word: FC<{
   });
 
   return (
-    <Box className={cls + className} color={previousColor}>
-      {word.split("").map((char, i) => (
-        <Letter key={i} char={char} isDone={isDone} index={i} />
-      ))}
-      <Box color={color} className="absolute top-0">
+    <Box className="relative">
+      {isDone && (
+        <Box
+          className={"flex " + previousCls + className}
+          color={previousColor}
+        >
+          {word.split("").map((char, i) => (
+            <Letter key={i} char={char} isDone={isDone} index={i} />
+          ))}
+        </Box>
+      )}
+      <Box
+        color={color}
+        className={(isDone ? "absolute top-0 " : "") + cls + className}
+      >
         {word}
       </Box>
     </Box>

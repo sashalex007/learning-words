@@ -36,6 +36,12 @@ export const Words: FC<IWords> = ({
             word={word}
             isPast={index < currentIndex}
             isCurrent={isCurrentShown ? index === currentIndex : false}
+            isPreviousCurrent={
+              isCurrentShown
+                ? index === currentIndex - 1 ||
+                  (index === 0 && currentIndex === 0)
+                : false
+            }
             isError={errors.has(index)}
             learningCount={learningWords.get(word) ?? 0}
           />
