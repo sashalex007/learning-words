@@ -1,29 +1,85 @@
 import {
-  MOBYDICK,
   DEFAULT_SIZE,
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
+  PERMANENT_KEYS,
+  FRENCH_1K,
+  ENGLISH_1K,
+  MOBYDICK,
 } from "./constant";
-import { get, remove, set } from "./storage";
+import { get, listKeys, remove, set } from "./storage";
+
+const randomize = (input: string) => {
+  const text = input.replace(/(\r\n|\n|\r)/gm, " ");
+  const words = text.split(" ");
+  const randomized = words.sort(() => Math.random() - 0.5);
+  return randomized.join(" ");
+};
 
 export namespace Store {
   /*
    * text
    */
-  export const getText = (key: string): string =>
-    get("text-" + key)?.text || "";
-
-  export const listTextsTitles = (): string[] => {
-    const keys = Object.keys(localStorage);
-    return keys.filter((key) => key.startsWith("text-"));
+  export type Text = {
+    title: string;
+    text: string;
+    progress: number;
   };
 
-  export const addText = (key: string, value: string): void =>
-    set("text-" + key, { title: key, text: value });
+  export const getText = (key: string): Text => {
+    const text = get("text-" + key);
+
+    if (text) return text;
+
+    switch (key) {
+      case PERMANENT_KEYS[0]:
+        return {
+          title: key,
+          progress: 0,
+          text: randomize(ENGLISH_1K),
+        };
+      case PERMANENT_KEYS[1]:
+        return {
+          title: key,
+          progress: 0,
+          text: randomize(FRENCH_1K),
+        };
+      case PERMANENT_KEYS[2]:
+        return {
+          title: key,
+          progress: 0,
+          text: MOBYDICK,
+        };
+      default:
+        return {
+          title: key,
+          progress: 0,
+          text: "",
+        };
+    }
+  };
+
+  export const listTextsTitles = (): string[] => {
+    const keys = listKeys();
+    const list = keys
+      .filter((key) => key.startsWith("text-"))
+      .map((key) => key.replace("text-", ""));
+    const set = new Set([...PERMANENT_KEYS, ...list]);
+    return Array.from(set);
+  };
+
+  export const setText = (key: string, value: string): void => {
+    const existing = getText(key);
+    set("text-" + key, {
+      title: key,
+      text: value,
+      progress: 0 || existing.progress,
+    });
+  };
 
   export const removeText = (key: string): void => remove("text-" + key);
 
-  export const setText = (key: string): void => set("current-text", key);
+  export const setCurrentText = (key: string): void => set("current-text", key);
 
   export const getCurrentTextKey = (): string => {
     const current = get("current-text");
@@ -32,13 +88,13 @@ export namespace Store {
     return keys[0] || "";
   };
 
-  export const getCurrentText = (): string => {
+  export const getCurrentText = (): Text => {
     const key = getCurrentTextKey();
     return getText(key);
   };
 
   const getWordsCount = (): number => {
-    const text = getCurrentText();
+    const text = getCurrentText().text;
     return text.split(/[ :\n]/).length;
   };
 
@@ -79,25 +135,30 @@ export namespace Store {
   /*
    * progress
    */
-  export const getProgress = () => get("progress") || 0;
+  const getProgress = (): number => getCurrentText().progress;
 
-  const setProgress = (value: number) => set("progress", value);
+  const setCurrentTextProgress = (progress: number) => {
+    const { text, title } = getCurrentText();
+    set("text-" + title, { text, title, progress });
+  };
 
   export const next = () => {
     const size = getSize();
     const progress = getProgress();
-    setProgress(progress + size);
+    setCurrentTextProgress(progress + size);
   };
 
   export const back = () => {
     const size = getSize();
     const progress = getProgress();
     const wordsCount = getWordsCount();
-    setProgress(Math.min(wordsCount - size, Math.max(0, progress - size)));
+    setCurrentTextProgress(
+      Math.min(wordsCount - size, Math.max(0, progress - size))
+    );
   };
 
   export const reset = () => {
-    setProgress(0);
+    setCurrentTextProgress(0);
   };
 
   /*
@@ -111,8 +172,7 @@ export namespace Store {
   };
 
   export const getTextWords = () => {
-    const progress = getProgress();
-    const text = getCurrentText();
+    const { text, progress } = getCurrentText();
     const size = getSize();
     const previousCount = PREVIOUS_WORD_COUNT;
     return {

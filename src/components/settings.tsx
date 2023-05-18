@@ -2,11 +2,8 @@
 
 import {
   DEFAULT_SIZE,
-  MOBYDICK,
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
-  ENGLISH_1K,
-  FRENCH_1K,
 } from "@/constant";
 import { Store } from "@/stores";
 import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
@@ -21,17 +18,11 @@ import {
 } from "@chakra-ui/react";
 import { FC, ReactNode, useEffect, useState } from "react";
 
-const randomize = (input: string) => {
-  const text = input.replace(/(\r\n|\n|\r)/gm, " ");
-  const words = text.split(" ");
-  const randomized = words.sort(() => Math.random() - 0.5);
-  return randomized.join(" ");
-};
-
 export const Settings: FC = () => {
   const color = useColorModeValue("gray.700", "gray.300");
+  const currentText = Store.getCurrentText();
 
-  const [text, setText] = useState(Store.getCurrentText());
+  const [text, setText] = useState<Store.Text>(currentText);
 
   const [size, setSize] = useState(Store.getSize());
   const [learningSize, setLearningSize] = useState(Store.getLearningSize());
@@ -49,8 +40,15 @@ export const Settings: FC = () => {
     Store.setIsSimpleBackspaceIgnored(isSimpleBackspaceIgnored);
   }, [isSimpleBackspaceIgnored]);
 
-  const save = () => Store.setText(text);
+  const save = () => Store.setText(text.title, text.text);
   const reset = () => setText(Store.getCurrentText());
+  const select = (key: string) => {
+    const text = Store.getText(key);
+    setText(text);
+    Store.setText(key, text.text);
+    Store.setCurrentText(key);
+  };
+  const list = Store.listTextsTitles();
 
   return (
     <div className="flex flex-col gap-4">
@@ -58,27 +56,34 @@ export const Settings: FC = () => {
         title="Training text"
         instructions="You can set any text you want to train on (list of words, articles, code, etc.)"
         input={
-          <Textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Enter the text you want to train on"
-            variant="filled"
-            color={color}
-            rows={5}
-          />
+          <div className="flex flex-col gap-6 items-start">
+            <div className="flex gap-4 justify-end">
+              {list.map((key) => {
+                const isSelected = key === currentText.title;
+                return (
+                  <Button
+                    key={key}
+                    onClick={() => select(key)}
+                    size="sm"
+                    variant={isSelected ? "outline" : "ghost"}
+                  >
+                    {key}
+                  </Button>
+                );
+              })}
+            </div>
+            <Textarea
+              value={text.text}
+              onChange={(e) => setText((t) => ({ ...t, text: e.target.value }))}
+              placeholder="Enter the text you want to train on"
+              variant="filled"
+              color={color}
+              rows={5}
+            />
+          </div>
         }
         button={
           <div className="flex gap-4 justify-end">
-            <Button onClick={() => setText(randomize(ENGLISH_1K))} size="sm">
-              English 1k
-            </Button>
-            <Button onClick={() => setText(randomize(FRENCH_1K))} size="sm">
-              French 1k
-            </Button>
-            <Button onClick={() => setText(MOBYDICK)} size="sm">
-              First paragraph of Moby Dick
-            </Button>
-
             <Button
               className="w-44"
               onClick={reset}

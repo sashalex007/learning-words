@@ -8,6 +8,7 @@ interface INavigation {
 }
 
 export const Navigation: FC<INavigation> = ({ onChange }) => {
+  const currentText = Store.getCurrentText();
   const next = () => {
     Store.next();
     onChange();
@@ -21,7 +22,8 @@ export const Navigation: FC<INavigation> = ({ onChange }) => {
     onChange();
   };
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 items-center">
+      <div className="mr-4">{currentText.progress}</div>
       <Button onClick={reset} size="sm">
         back to the start
       </Button>
