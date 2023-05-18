@@ -31,7 +31,7 @@ const randomize = (input: string) => {
 export const Settings: FC = () => {
   const color = useColorModeValue("gray.700", "gray.300");
 
-  const [text, setText] = useState(Store.getText());
+  const [text, setText] = useState(Store.getCurrentText());
 
   const [size, setSize] = useState(Store.getSize());
   const [learningSize, setLearningSize] = useState(Store.getLearningSize());
@@ -50,7 +50,7 @@ export const Settings: FC = () => {
   }, [isSimpleBackspaceIgnored]);
 
   const save = () => Store.setText(text);
-  const reset = () => setText(Store.getText());
+  const reset = () => setText(Store.getCurrentText());
 
   return (
     <div className="flex flex-col gap-4">

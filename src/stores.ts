@@ -4,18 +4,41 @@ import {
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
 } from "./constant";
-import { get, set } from "./storage";
+import { get, remove, set } from "./storage";
 
 export namespace Store {
   /*
    * text
    */
-  export const getText = (): string => get("text") || MOBYDICK;
+  export const getText = (key: string): string =>
+    get("text-" + key)?.text || "";
 
-  export const setText = (value: string): void => set("text", value);
+  export const listTextsTitles = (): string[] => {
+    const keys = Object.keys(localStorage);
+    return keys.filter((key) => key.startsWith("text-"));
+  };
+
+  export const addText = (key: string, value: string): void =>
+    set("text-" + key, { title: key, text: value });
+
+  export const removeText = (key: string): void => remove("text-" + key);
+
+  export const setText = (key: string): void => set("current-text", key);
+
+  export const getCurrentTextKey = (): string => {
+    const current = get("current-text");
+    if (current) return current;
+    const keys = listTextsTitles();
+    return keys[0] || "";
+  };
+
+  export const getCurrentText = (): string => {
+    const key = getCurrentTextKey();
+    return getText(key);
+  };
 
   const getWordsCount = (): number => {
-    const text = getText();
+    const text = getCurrentText();
     return text.split(/[ :\n]/).length;
   };
 
@@ -89,7 +112,7 @@ export namespace Store {
 
   export const getTextWords = () => {
     const progress = getProgress();
-    const text = getText();
+    const text = getCurrentText();
     const size = getSize();
     const previousCount = PREVIOUS_WORD_COUNT;
     return {
