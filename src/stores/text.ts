@@ -1,13 +1,12 @@
 import {
-  DEFAULT_SIZE,
-  DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
   PERMANENT_KEYS,
   FRENCH_1K,
   ENGLISH_1K,
   MOBYDICK,
-} from "./constant";
-import { get, listKeys, remove, set } from "./storage";
+} from "../constant";
+import { get, listKeys, remove, set } from "../storage";
+import { Settings } from "./settings";
 
 const randomize = (input: string) => {
   const text = input.replace(/(\r\n|\n|\r)/gm, " ");
@@ -16,7 +15,7 @@ const randomize = (input: string) => {
   return randomized.join(" ");
 };
 
-export namespace Store {
+export namespace Text {
   /*
    * text
    */
@@ -93,44 +92,15 @@ export namespace Store {
     return getText(key);
   };
 
-  const getWordsCount = (): number => {
+  export const getCurrentTextWordsCount = (): number => {
     const text = getCurrentText().text;
     return text.split(/[ :\n]/).length;
   };
 
-  /*
-   * size
-   */
-  export const getSize = (): number => get("size") || DEFAULT_SIZE;
-
-  export const setSize = (value: number): void => set("size", value);
-
-  /*
-   * previousCount
-   */
-  export const getPreviousCount = (): number =>
-    get("previous-words-count") || PREVIOUS_WORD_COUNT;
-
-  export const setPreviousCount = (value: number): void =>
-    set("previous-words-count", value);
-
-  /*
-   * learning size
-   */
-  export const getLearningSize = (): number =>
-    get("learning-size") || DEFAULT_LEARNING_SIZE;
-
-  export const setLearningSize = (value: number): void =>
-    set("learning-size", value);
-
-  /*
-   * ignore simple backspace
-   */
-  export const getIsSimpleBackspaceIgnored = (): boolean =>
-    get("ignore-simple-backspace") || false;
-
-  export const setIsSimpleBackspaceIgnored = (value: boolean): void =>
-    set("ignore-simple-backspace", value);
+  const getWordsCount = (): number => {
+    const text = getCurrentText().text;
+    return text.split(/[ :\n]/).length;
+  };
 
   /*
    * progress
@@ -143,13 +113,13 @@ export namespace Store {
   };
 
   export const next = () => {
-    const size = getSize();
+    const size = Settings.getSize();
     const progress = getProgress();
     setCurrentTextProgress(progress + size);
   };
 
   export const back = () => {
-    const size = getSize();
+    const size = Settings.getSize();
     const progress = getProgress();
     const wordsCount = getWordsCount();
     setCurrentTextProgress(
@@ -173,7 +143,7 @@ export namespace Store {
 
   export const getTextWords = () => {
     const { text, progress } = getCurrentText();
-    const size = getSize();
+    const size = Settings.getSize();
     const previousCount = PREVIOUS_WORD_COUNT;
     return {
       words: getWordsFromText(text, progress, size),
@@ -187,7 +157,7 @@ export namespace Store {
 
   export const getPracticeWords = () => {
     // select number of words to practice
-    const count = getLearningSize();
+    const count = Settings.getLearningSize();
 
     // get the list of words to practice
     const record = getLearningWordsAsRecord();

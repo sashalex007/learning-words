@@ -1,6 +1,6 @@
 "use client";
 
-import { Store } from "@/stores";
+import { Text } from "@/stores/text";
 import { FC, ReactNode, Suspense, useState } from "react";
 import { Word } from "./word";
 import { IconButton } from "@chakra-ui/react";
@@ -9,7 +9,7 @@ import { SmallCloseIcon } from "@chakra-ui/icons";
 export const LearningWords: FC = () => {
   const [, toggle] = useState(false);
   const render = () => toggle((r) => !r);
-  const words = Array.from(Store.getLearningWords().entries());
+  const words = Array.from(Text.getLearningWords().entries());
 
   if (!words.length) {
     return (
@@ -38,7 +38,7 @@ export const LearningWords: FC = () => {
                 className="ml-auto"
                 aria-label="Remove"
                 onClick={() => {
-                  Store.removeLearningWord(word);
+                  Text.removeLearningWord(word);
                   render();
                 }}
                 variant="ghost"

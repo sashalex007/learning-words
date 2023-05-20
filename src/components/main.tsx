@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { FC } from "react";
 import { Practice } from "./practice";
-import { Settings } from "./settings";
+import { SettingsTab } from "./settings";
 import { LearningWords } from "./learning-words";
 
 const tabs: Tab[] = [
@@ -25,7 +25,7 @@ export interface Tab {
   href: string;
 }
 
-const TabsComponent = [Practice, Settings, LearningWords];
+const TabsComponent = [Practice, SettingsTab, LearningWords];
 
 export const Main: FC = () => {
   const { push } = useRouter();

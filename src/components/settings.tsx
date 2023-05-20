@@ -5,7 +5,8 @@ import {
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
 } from "@/constant";
-import { Store } from "@/stores";
+import { Text } from "@/stores/text";
+import { Settings } from "@/stores/settings";
 import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -18,37 +19,39 @@ import {
 } from "@chakra-ui/react";
 import { FC, ReactNode, useEffect, useState } from "react";
 
-export const Settings: FC = () => {
+export const SettingsTab: FC = () => {
   const color = useColorModeValue("gray.700", "gray.300");
-  const currentText = Store.getCurrentText();
+  const currentText = Text.getCurrentText();
 
-  const [text, setText] = useState<Store.Text>(currentText);
+  const [text, setText] = useState<Text.Text>(currentText);
 
-  const [size, setSize] = useState(Store.getSize());
-  const [learningSize, setLearningSize] = useState(Store.getLearningSize());
-  const [previousCount, setPreviousCount] = useState(Store.getPreviousCount());
-
-  const [isSimpleBackspaceIgnored, setIsSimpleBackspaceIgnored] = useState(
-    Store.getIsSimpleBackspaceIgnored()
+  const [size, setSize] = useState(Settings.getSize());
+  const [learningSize, setLearningSize] = useState(Settings.getLearningSize());
+  const [previousCount, setPreviousCount] = useState(
+    Settings.getPreviousCount()
   );
 
-  useEffect(() => Store.setSize(size), [size]);
-  useEffect(() => Store.setLearningSize(learningSize), [learningSize]);
-  useEffect(() => Store.setPreviousCount(previousCount), [previousCount]);
+  const [isSimpleBackspaceIgnored, setIsSimpleBackspaceIgnored] = useState(
+    Settings.getIsSimpleBackspaceIgnored()
+  );
+
+  useEffect(() => Settings.setSize(size), [size]);
+  useEffect(() => Settings.setLearningSize(learningSize), [learningSize]);
+  useEffect(() => Settings.setPreviousCount(previousCount), [previousCount]);
 
   useEffect(() => {
-    Store.setIsSimpleBackspaceIgnored(isSimpleBackspaceIgnored);
+    Settings.setIsSimpleBackspaceIgnored(isSimpleBackspaceIgnored);
   }, [isSimpleBackspaceIgnored]);
 
-  const save = () => Store.setText(text.title, text.text);
-  const reset = () => setText(Store.getCurrentText());
+  const save = () => Text.setText(text.title, text.text);
+  const reset = () => setText(Text.getCurrentText());
   const select = (key: string) => {
-    const text = Store.getText(key);
+    const text = Text.getText(key);
     setText(text);
-    Store.setText(key, text.text);
-    Store.setCurrentText(key);
+    Text.setText(key, text.text);
+    Text.setCurrentText(key);
   };
-  const list = Store.listTextsTitles();
+  const list = Text.listTextsTitles();
 
   return (
     <div className="flex flex-col gap-4">

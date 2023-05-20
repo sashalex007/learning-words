@@ -1,10 +1,10 @@
-import { Store } from "@/stores";
+import { Text } from "@/stores/text";
 import { FC, Suspense } from "react";
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { useLearningColors } from "./word";
 
 export const CurrentLearningWords: FC<{
-  words: Store.LearningWords;
+  words: Text.LearningWords;
   currentWord: string;
 }> = ({ words, currentWord }) => {
   const squares = Array.from(words);

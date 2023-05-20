@@ -1,4 +1,4 @@
-import { Store } from "@/stores";
+import { Text } from "@/stores/text";
 import { FC } from "react";
 import { Button, IconButton } from "@chakra-ui/react";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
@@ -8,22 +8,23 @@ interface INavigation {
 }
 
 export const Navigation: FC<INavigation> = ({ onChange }) => {
-  const currentText = Store.getCurrentText();
+  const currentText = Text.getCurrentText();
+  const wordsCount = Text.getCurrentTextWordsCount();
   const next = () => {
-    Store.next();
+    Text.next();
     onChange();
   };
   const back = () => {
-    Store.back();
+    Text.back();
     onChange();
   };
   const reset = () => {
-    Store.reset();
+    Text.reset();
     onChange();
   };
   return (
     <div className="flex gap-2 items-center">
-      <div className="mr-4">{currentText.progress}</div>
+      <div>{currentText.progress}</div>/<div className="mr-4">{wordsCount}</div>
       <Button onClick={reset} size="sm">
         back to the start
       </Button>
