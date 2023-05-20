@@ -113,13 +113,13 @@ export namespace Text {
   };
 
   export const next = () => {
-    const size = Settings.getSize();
+    const size = Settings.get().size;
     const progress = getProgress();
     setCurrentTextProgress(progress + size);
   };
 
   export const back = () => {
-    const size = Settings.getSize();
+    const size = Settings.get().size;
     const progress = getProgress();
     const wordsCount = getWordsCount();
     setCurrentTextProgress(
@@ -143,7 +143,7 @@ export namespace Text {
 
   export const getTextWords = () => {
     const { text, progress } = getCurrentText();
-    const size = Settings.getSize();
+    const size = Settings.get().size;
     const previousCount = PREVIOUS_WORD_COUNT;
     return {
       words: getWordsFromText(text, progress, size),
@@ -157,7 +157,7 @@ export namespace Text {
 
   export const getPracticeWords = () => {
     // select number of words to practice
-    const count = Settings.getLearningSize();
+    const count = Settings.get().learningSize;
 
     // get the list of words to practice
     const record = getLearningWordsAsRecord();

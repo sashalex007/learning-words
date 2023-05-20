@@ -11,7 +11,7 @@ import { CurrentLearningWords } from "./squares";
 const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
   const { key, altKey } = e;
   if (key !== "Backspace") return;
-  if (!Settings.getIsSimpleBackspaceIgnored() || altKey) return;
+  if (!Settings.get().isSimpleBackspaceIgnored || altKey) return;
 
   e.preventDefault();
 };
@@ -143,7 +143,7 @@ export const Practice: FC = () => {
           <Navigation onChange={resetExercise} />
         </div>
 
-        {Settings.getIsSimpleBackspaceIgnored() && (
+        {Settings.get().isSimpleBackspaceIgnored && (
           <div className="text-sm">
             <div> {`Only "alt + backspace" allowed`}</div>
             <div>{`This can be turned off in the settings.`}</div>

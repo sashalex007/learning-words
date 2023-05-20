@@ -25,23 +25,8 @@ export const SettingsTab: FC = () => {
 
   const [text, setText] = useState<Text.Text>(currentText);
 
-  const [size, setSize] = useState(Settings.getSize());
-  const [learningSize, setLearningSize] = useState(Settings.getLearningSize());
-  const [previousCount, setPreviousCount] = useState(
-    Settings.getPreviousCount()
-  );
-
-  const [isSimpleBackspaceIgnored, setIsSimpleBackspaceIgnored] = useState(
-    Settings.getIsSimpleBackspaceIgnored()
-  );
-
-  useEffect(() => Settings.setSize(size), [size]);
-  useEffect(() => Settings.setLearningSize(learningSize), [learningSize]);
-  useEffect(() => Settings.setPreviousCount(previousCount), [previousCount]);
-
-  useEffect(() => {
-    Settings.setIsSimpleBackspaceIgnored(isSimpleBackspaceIgnored);
-  }, [isSimpleBackspaceIgnored]);
+  const [settings, setSettings] = useState(Settings.get());
+  useEffect(() => Settings.update(settings), [settings]);
 
   const save = () => Text.setText(text.title, text.text);
   const reset = () => setText(Text.getCurrentText());
@@ -115,9 +100,11 @@ export const SettingsTab: FC = () => {
         title="Number of words per exercise"
         input={
           <Input
-            value={size}
+            value={settings.size}
             type="number"
-            onChange={(e) => setSize(parseInt(e.target.value))}
+            onChange={(e) => {
+              setSettings((s) => ({ ...s, size: parseInt(e.target.value) }));
+            }}
             variant="filled"
             color={color}
             className="w-24"
@@ -126,7 +113,7 @@ export const SettingsTab: FC = () => {
         instructions="Words from the text to type per exercise"
         button={
           <IconButton
-            onClick={() => setSize(DEFAULT_SIZE)}
+            onClick={() => setSettings((s) => ({ ...s, size: DEFAULT_SIZE }))}
             aria-label="Reset to default"
             icon={<RepeatIcon />}
           />
@@ -137,9 +124,14 @@ export const SettingsTab: FC = () => {
         title={`Max number of "words to learn" per exercise`}
         input={
           <Input
-            value={learningSize}
+            value={settings.learningSize}
             type="number"
-            onChange={(e) => setLearningSize(parseInt(e.target.value))}
+            onChange={(e) => {
+              setSettings((s) => ({
+                ...s,
+                learningSize: parseInt(e.target.value),
+              }));
+            }}
             variant="filled"
             color={color}
             className="w-24"
@@ -148,7 +140,12 @@ export const SettingsTab: FC = () => {
         instructions={`"Words to learn" to type at the beginning of each exercise`}
         button={
           <IconButton
-            onClick={() => setLearningSize(DEFAULT_LEARNING_SIZE)}
+            onClick={() =>
+              setSettings((s) => ({
+                ...s,
+                learningSize: DEFAULT_LEARNING_SIZE,
+              }))
+            }
             aria-label="Reset to default"
             icon={<RepeatIcon />}
           />
@@ -159,9 +156,14 @@ export const SettingsTab: FC = () => {
         title="Number of previous words shown"
         input={
           <Input
-            value={previousCount}
+            value={settings.previousCount}
             type="number"
-            onChange={(e) => setPreviousCount(parseInt(e.target.value))}
+            onChange={(e) => {
+              setSettings((s) => ({
+                ...s,
+                previousCount: parseInt(e.target.value),
+              }));
+            }}
             variant="filled"
             color={color}
             className="w-24"
@@ -170,7 +172,12 @@ export const SettingsTab: FC = () => {
         instructions="Number of words shown from the previous exercise"
         button={
           <IconButton
-            onClick={() => setPreviousCount(PREVIOUS_WORD_COUNT)}
+            onClick={() =>
+              setSettings((s) => ({
+                ...s,
+                previousCount: PREVIOUS_WORD_COUNT,
+              }))
+            }
             aria-label="Reset to default"
             icon={<RepeatIcon />}
           />
@@ -182,10 +189,13 @@ export const SettingsTab: FC = () => {
         instructions="Forces you to delete the whole world in case of mistake (alt + backspace)"
         input={
           <Switch
-            defaultChecked={isSimpleBackspaceIgnored}
-            onChange={() =>
-              setIsSimpleBackspaceIgnored(!isSimpleBackspaceIgnored)
-            }
+            defaultChecked={settings.isSimpleBackspaceIgnored}
+            onChange={() => {
+              setSettings((s) => ({
+                ...s,
+                isSimpleBackspaceIgnored: !s.isSimpleBackspaceIgnored,
+              }));
+            }}
             color={color}
           />
         }

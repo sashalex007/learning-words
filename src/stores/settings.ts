@@ -3,40 +3,27 @@ import {
   DEFAULT_LEARNING_SIZE,
   PREVIOUS_WORD_COUNT,
 } from "../constant";
-import { get, set } from "../storage";
+import { get as getValue, set } from "../storage";
+
+const DEFAULT_SETTINGS = {
+  size: DEFAULT_SIZE,
+  previousCount: PREVIOUS_WORD_COUNT,
+  learningSize: DEFAULT_LEARNING_SIZE,
+  isSimpleBackspaceIgnored: false,
+};
 
 export namespace Settings {
-  /*
-   * size
-   */
-  export const getSize = (): number => get("size") || DEFAULT_SIZE;
+  interface Settings {
+    size: number;
+    previousCount: number;
+    learningSize: number;
+    isSimpleBackspaceIgnored: boolean;
+  }
 
-  export const setSize = (value: number): void => set("size", value);
+  export const get = (): Settings => getValue("settings") || DEFAULT_SETTINGS;
 
-  /*
-   * previousCount
-   */
-  export const getPreviousCount = (): number =>
-    get("previous-words-count") || PREVIOUS_WORD_COUNT;
-
-  export const setPreviousCount = (value: number): void =>
-    set("previous-words-count", value);
-
-  /*
-   * learning size
-   */
-  export const getLearningSize = (): number =>
-    get("learning-size") || DEFAULT_LEARNING_SIZE;
-
-  export const setLearningSize = (value: number): void =>
-    set("learning-size", value);
-
-  /*
-   * ignore simple backspace
-   */
-  export const getIsSimpleBackspaceIgnored = (): boolean =>
-    get("ignore-simple-backspace") || false;
-
-  export const setIsSimpleBackspaceIgnored = (value: boolean): void =>
-    set("ignore-simple-backspace", value);
+  export const update = (value: Partial<Settings>): void => {
+    const settings = get();
+    set("settings", { ...settings, ...value });
+  };
 }
