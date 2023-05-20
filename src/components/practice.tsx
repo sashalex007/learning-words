@@ -85,6 +85,7 @@ export const Practice: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const focusInput = () => {
     inputRef.current?.focus();
+    setIsCurrentShown(true);
   };
 
   return (
@@ -92,7 +93,7 @@ export const Practice: FC = () => {
       <CurrentLearningWords words={learningWords} currentWord={currentWord} />
 
       <div className="flex flex-col gap-6 relative">
-        {inputRef.current !== document.activeElement && (
+        {!isCurrentShown && (
           <div
             onClick={focusInput}
             className="cursor-pointer absolute -top-8 -left-8 -right-8 -bottom-8 backdrop-blur z-10 flex items-center justify-center"
@@ -102,6 +103,7 @@ export const Practice: FC = () => {
             </Box>
           </div>
         )}
+
         <Suspense fallback={<div>Loading...</div>}>
           {!!practiceWords.length && (
             <Words
