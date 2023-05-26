@@ -88,6 +88,8 @@ export const Practice: FC = () => {
     setIsCurrentShown(true);
   };
 
+  const { progress } = Text.getCurrentText();
+
   return (
     <div className="flex flex-col gap-12">
       <CurrentLearningWords words={learningWords} currentWord={currentWord} />
@@ -96,7 +98,7 @@ export const Practice: FC = () => {
         {!isCurrentShown && (
           <div
             onClick={focusInput}
-            className="cursor-pointer absolute -top-8 -left-8 -right-8 -bottom-8 backdrop-blur z-10 flex items-center justify-center"
+            className="cursor-pointer absolute -top-8 -left-8 -right-8 -bottom-8 backdrop-blur z-20 flex items-center justify-center"
           >
             <Box color={color} className="font-bold">
               Click here
@@ -107,22 +109,24 @@ export const Practice: FC = () => {
         <Suspense fallback={<div>Loading...</div>}>
           {!!practiceWords.length && (
             <Words
+              key={"practice-" + progress}
+              input={inputValue}
               hasBrackets
               words={practiceWords}
               index={index}
               isCurrentShown={isCurrentShown}
-              errors={errors}
               learningWords={Text.getLearningWords()}
             />
           )}
 
           <Words
+            key={"text-" + progress}
+            input={inputValue}
             previousWords={textWords.previousWords}
             words={textWords.words}
             initialIndex={practiceWords.length}
             index={index}
             isCurrentShown={isCurrentShown}
-            errors={errors}
             learningWords={learningWords}
           />
         </Suspense>

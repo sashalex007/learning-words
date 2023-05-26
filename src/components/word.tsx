@@ -57,28 +57,23 @@ const useWordStyle = ({
 };
 
 export const Word: FC<{
+  input?: string;
   word: string;
   isPast?: boolean;
   isCurrent?: boolean;
   isPreviousCurrent?: boolean;
-  isError?: boolean;
   learningCount?: number;
   className?: string;
 }> = ({
   word,
+  input = "",
   isPast = false,
   isPreviousCurrent = false,
   isCurrent = false,
-  isError = false,
   learningCount = 0,
   className,
 }) => {
-  const [previousState] = useState({
-    isCurrent: isPreviousCurrent,
-    learningCount,
-    isPast,
-    isError,
-  });
+  const [previousState] = useState({ learningCount, isPast });
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
@@ -86,7 +81,9 @@ export const Word: FC<{
       setIsDone(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCurrent, isError, learningCount]);
+  }, [isCurrent, learningCount]);
+
+  const isError = isCurrent && input !== word.slice(0, input.length);
 
   const { color, cls } = useWordStyle({
     isPast,
@@ -94,59 +91,65 @@ export const Word: FC<{
     isError,
     learningCount,
   });
-  const { color: previousColor, cls: previousCls } = useWordStyle({
+  const { color: lettersColor, cls: lettersCls } = useWordStyle({
     isPast: previousState.isPast,
-    isCurrent: previousState.isCurrent,
-    isError: previousState.isError,
+    isCurrent,
+    isError,
     learningCount: previousState.learningCount,
   });
 
+  const letters = word.split("");
+  const excessCount = Math.max(0, input.length - word.length);
+  const inExcessLetters = new Array(excessCount).fill("_");
+  const displayedLetters = [...letters, ...inExcessLetters];
+
   return (
     <Box className="relative">
+      <Box className={"flex " + lettersCls + className} color={lettersColor}>
+        {displayedLetters.map((char, i) => (
+          <Letter
+            key={i}
+            char={char}
+            isWordTyped={isDone}
+            index={i}
+            isLetterTyped={i < input.length}
+          />
+        ))}
+      </Box>
       {isDone && (
-        <Box
-          className={"flex " + previousCls + className}
-          color={previousColor}
-        >
-          {word.split("").map((char, i) => (
-            <Letter key={i} char={char} isDone={isDone} index={i} />
-          ))}
+        <Box color={color} className={"absolute top-0 " + cls + className}>
+          {word}
         </Box>
       )}
-      <Box
-        color={color}
-        className={(isDone ? "absolute top-0 " : "") + cls + className}
-      >
-        {word}
-      </Box>
     </Box>
   );
 };
 
-const Letter: FC<{ char: string; isDone: boolean; index: number }> = ({
-  char,
-  isDone,
-  index,
-}) => {
+const Letter: FC<{
+  char: string;
+  isWordTyped: boolean;
+  isLetterTyped: boolean;
+  index: number;
+}> = ({ char, isWordTyped, index, isLetterTyped }) => {
   const [isAnimated, setIsAnimated] = useState(false);
 
   useEffect(() => {
-    if (isDone) {
+    if (isWordTyped) {
       setTimeout(() => setIsAnimated(true), index * 100);
     }
-  }, [isDone, index]);
+  }, [isWordTyped, index]);
 
-  const animatedCls = `${
-    index % 2 === 0 ? "-translate-y-4" : "translate-y-4"
-  } opacity-0 -translate-x-2 rotate-180`;
+  const animatedCls = isAnimated
+    ? `${
+        index % 2 === 0 ? "-translate-y-4" : "translate-y-4"
+      } opacity-0 -translate-x-2 rotate-180`
+    : "";
 
-  return (
-    <div
-      className={`transition-all duration-1000 z-10 ${
-        isAnimated ? animatedCls : ""
-      }`}
-    >
-      {char}
-    </div>
-  );
+  const typedCls = isLetterTyped ? "opacity-20" : "";
+  const baseCls = `transition-all ease-in-out ${
+    isWordTyped ? "duration-1000" : "duration-250"
+  } z-10`;
+  const cls = baseCls + " " + typedCls + " " + animatedCls;
+
+  return <div className={cls}>{char}</div>;
 };
