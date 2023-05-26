@@ -1,5 +1,7 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { FC, useEffect, useState } from "react";
+import { WordWithLetters } from "./letters";
+import { getIsMatchingSoFar } from "@/utils";
 
 export const useLearningColors = (learningCount: number) => {
   const learningColors = [
@@ -61,29 +63,29 @@ export const Word: FC<{
   word: string;
   isPast?: boolean;
   isCurrent?: boolean;
-  isPreviousCurrent?: boolean;
+  isNextCurrent?: boolean;
   learningCount?: number;
   className?: string;
 }> = ({
   word,
   input = "",
   isPast = false,
-  isPreviousCurrent = false,
+  isNextCurrent = false,
   isCurrent = false,
   learningCount = 0,
   className,
 }) => {
   const [previousState] = useState({ learningCount, isPast });
-  const [isDone, setIsDone] = useState(false);
+  const [isTyped, setIsTyped] = useState(false);
 
   useEffect(() => {
-    if (!isCurrent && isPreviousCurrent) {
-      setIsDone(true);
+    if (!isCurrent && isNextCurrent) {
+      setIsTyped(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCurrent, learningCount]);
 
-  const isError = isCurrent && input !== word.slice(0, input.length);
+  const isError = isCurrent && !getIsMatchingSoFar(word, input);
 
   const { color, cls } = useWordStyle({
     isPast,
@@ -98,58 +100,21 @@ export const Word: FC<{
     learningCount: previousState.learningCount,
   });
 
-  const letters = word.split("");
-  const excessCount = Math.max(0, input.length - word.length);
-  const inExcessLetters = new Array(excessCount).fill("_");
-  const displayedLetters = [...letters, ...inExcessLetters];
-
   return (
     <Box className="relative">
-      <Box className={"flex " + lettersCls + className} color={lettersColor}>
-        {displayedLetters.map((char, i) => (
-          <Letter
-            key={i}
-            char={char}
-            isWordTyped={isDone}
-            index={i}
-            isLetterTyped={i < input.length}
-          />
-        ))}
-      </Box>
-      {isDone && (
+      <WordWithLetters
+        word={word}
+        input={input}
+        isTyped={isTyped}
+        className={lettersCls + className}
+        color={lettersColor}
+      />
+
+      {isTyped && (
         <Box color={color} className={"absolute top-0 " + cls + className}>
           {word}
         </Box>
       )}
     </Box>
   );
-};
-
-const Letter: FC<{
-  char: string;
-  isWordTyped: boolean;
-  isLetterTyped: boolean;
-  index: number;
-}> = ({ char, isWordTyped, index, isLetterTyped }) => {
-  const [isAnimated, setIsAnimated] = useState(false);
-
-  useEffect(() => {
-    if (isWordTyped) {
-      setTimeout(() => setIsAnimated(true), index * 100);
-    }
-  }, [isWordTyped, index]);
-
-  const animatedCls = isAnimated
-    ? `${
-        index % 2 === 0 ? "-translate-y-4" : "translate-y-4"
-      } opacity-0 -translate-x-2 rotate-180`
-    : "";
-
-  const typedCls = isLetterTyped ? "opacity-20" : "";
-  const baseCls = `transition-all ease-in-out ${
-    isWordTyped ? "duration-1000" : "duration-250"
-  } z-10`;
-  const cls = baseCls + " " + typedCls + " " + animatedCls;
-
-  return <div className={cls}>{char}</div>;
 };

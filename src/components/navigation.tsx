@@ -5,10 +5,10 @@ import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 
 interface INavigation {
   onChange: () => void;
+  progress: number;
 }
 
-export const Navigation: FC<INavigation> = ({ onChange }) => {
-  const currentText = Text.getCurrentText();
+export const Navigation: FC<INavigation> = ({ onChange, progress }) => {
   const wordsCount = Text.getCurrentTextWordsCount();
   const next = () => {
     Text.next();
@@ -24,7 +24,7 @@ export const Navigation: FC<INavigation> = ({ onChange }) => {
   };
   return (
     <div className="flex gap-2 items-center">
-      <div>{currentText.progress}</div>/<div className="mr-4">{wordsCount}</div>
+      <div>{progress}</div>/<div className="mr-4">{wordsCount}</div>
       <Button onClick={reset} size="sm">
         back to the start
       </Button>

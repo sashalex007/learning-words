@@ -25,12 +25,15 @@ export const Words: FC<IWords> = ({
   return (
     <div className="flex gap-3 flex-wrap text-xl font-medium">
       {hasBrackets && <span>[</span>}
-      {previousWords.map((word, i) => {
-        return <Word key={word + i} word={word} isPast={true} />;
-      })}
+
+      {previousWords.map((word, i) => (
+        <Word key={word + i} word={word} isPast={true} />
+      ))}
+
       {words.map((word, i) => {
         const index = initialIndex + i;
         const isCurrent = index === currentIndex;
+        const isNextCurrent = index + 1 === currentIndex;
         return (
           <Word
             input={isCurrent ? input : ""}
@@ -38,16 +41,12 @@ export const Words: FC<IWords> = ({
             word={word}
             isPast={index < currentIndex}
             isCurrent={isCurrentShown ? isCurrent : false}
-            isPreviousCurrent={
-              isCurrentShown
-                ? index === currentIndex - 1 ||
-                  (index === 0 && currentIndex === 0)
-                : false
-            }
+            isNextCurrent={isNextCurrent}
             learningCount={learningWords.get(word) ?? 0}
           />
         );
       })}
+
       {hasBrackets && <span>]</span>}
     </div>
   );

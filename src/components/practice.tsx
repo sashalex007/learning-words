@@ -7,6 +7,7 @@ import { Words } from "./words";
 import { Navigation } from "./navigation";
 import { Box, Input, useColorModeValue } from "@chakra-ui/react";
 import { CurrentLearningWords } from "./squares";
+import { getIsMatchingSoFar } from "@/utils";
 
 const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
   const { key, altKey } = e;
@@ -56,8 +57,7 @@ export const Practice: FC = () => {
   };
 
   const updateWord = (word: string) => {
-    const isCorrect =
-      currentWord.startsWith(word) || ["^", "¨"].includes(word.slice(-1));
+    const isCorrect = getIsMatchingSoFar(currentWord, word);
 
     if (!isCorrect && !isError) {
       setErrors((e) => e.add(index));
@@ -146,7 +146,7 @@ export const Practice: FC = () => {
             autoFocus
           />
 
-          <Navigation onChange={resetExercise} />
+          <Navigation progress={progress} onChange={resetExercise} />
         </div>
 
         {Settings.get().isSimpleBackspaceIgnored && (
