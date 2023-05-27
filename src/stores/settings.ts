@@ -10,6 +10,7 @@ const DEFAULT_SETTINGS = {
   previousCount: PREVIOUS_WORD_COUNT,
   learningSize: DEFAULT_LEARNING_SIZE,
   isSimpleBackspaceIgnored: false,
+  isLetterHighlightEnabled: true,
 };
 
 export namespace Settings {
@@ -18,6 +19,7 @@ export namespace Settings {
     previousCount: number;
     learningSize: number;
     isSimpleBackspaceIgnored: boolean;
+    isLetterHighlightEnabled: boolean;
   }
 
   export const get = (): Settings => getValue("settings") || DEFAULT_SETTINGS;

@@ -1,3 +1,4 @@
+import { Settings } from "@/stores/settings";
 import { Box } from "@chakra-ui/react";
 import { FC, useEffect, useState } from "react";
 
@@ -20,6 +21,7 @@ export const WordWithLetters: FC<IWordWithLetters> = ({
   const excessCount = Math.max(0, input.length - word.length);
   const inExcessLetters = new Array(excessCount).fill("_");
   const displayedLetters = [...letters, ...inExcessLetters];
+  const { isLetterHighlightEnabled } = Settings.get();
 
   return (
     <Box className={"flex " + className} color={color}>
@@ -29,7 +31,7 @@ export const WordWithLetters: FC<IWordWithLetters> = ({
           char={char}
           isWordTyped={isTyped}
           index={i}
-          isLetterTyped={i < input.length}
+          isLetterTyped={isLetterHighlightEnabled ? i < input.length : false}
         />
       ))}
     </Box>

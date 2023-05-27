@@ -200,6 +200,23 @@ export const SettingsTab: FC = () => {
           />
         }
       />
+
+      <InlineSection
+        title="Highlight letters"
+        instructions="Shows progress within the word while typing it"
+        input={
+          <Switch
+            defaultChecked={settings.isLetterHighlightEnabled}
+            onChange={() => {
+              setSettings((s) => ({
+                ...s,
+                isLetterHighlightEnabled: !s.isLetterHighlightEnabled,
+              }));
+            }}
+            color={color}
+          />
+        }
+      />
     </div>
   );
 };
