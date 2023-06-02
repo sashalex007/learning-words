@@ -47,13 +47,13 @@ const useTyping = ({ words }: { words: string[] }) => {
   };
 
   const updateWord = (word: string) => {
+    setInput(word);
     const isCorrect = getIsMatchingSoFar(currentWord, word);
     if (!isCorrect && !isError) {
       setErrors((e) => e.add(index));
       Text.addLearningWord(currentWord);
       Data.addError(currentWord, word);
     }
-    setInput(word);
   };
 
   const submitWord = () => {
