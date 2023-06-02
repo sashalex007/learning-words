@@ -9,6 +9,7 @@ import { CurrentLearningWords } from "./squares";
 import { getIsMatchingSoFar } from "@/utils";
 import { useRouter } from "next/navigation";
 import { PracticeFooter } from "./practice-footer";
+import { Data } from "@/stores/data";
 
 const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
   const { key, altKey } = e;
@@ -50,6 +51,7 @@ const useTyping = ({ words }: { words: string[] }) => {
     if (!isCorrect && !isError) {
       setErrors((e) => e.add(index));
       Text.addLearningWord(currentWord);
+      Data.addError(currentWord, word);
     }
     setInput(word);
   };
