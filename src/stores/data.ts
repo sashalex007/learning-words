@@ -29,9 +29,13 @@ export namespace Data {
 
         if (letterCount && cat.length < letterCount) return acc;
 
+        const start = -target.length + (letterCount || 0) - 1;
+        const end = position - 1;
+        const fullError = target.slice(start, end) + error;
+
         acc[cat] ??= {};
-        acc[cat][error] ??= 0;
-        acc[cat][error] += 1;
+        acc[cat][fullError] ??= 0;
+        acc[cat][fullError] += 1;
         return acc;
       },
       {}

@@ -55,22 +55,31 @@ const AnalyticsLayout: FC<IAnalyticsLayout> = ({ title, data }) => {
         {title}
       </Box>
       <ul>
-        {targets.map(({ target, value }) => (
-          <li key={target} className="flex gap-2 ml-4">
-            <Box color={color} className="text-lg">
-              {target}
-            </Box>
-            -
-            <ElementAnalytics {...value} />
-          </li>
-        ))}
+        {targets.map(({ target, value, count }, i) => {
+          const isFirstOfCategory = count !== targets[i - 1]?.count;
+
+          return (
+            <>
+              {isFirstOfCategory && (
+                <div key={`cat-${count}`}>{`${count}`}</div>
+              )}
+              <li key={target} className="flex gap-2 ml-4">
+                <Box color={color} className="text-lg">
+                  {target}
+                </Box>
+                -
+                <ElementAnalytics {...value} />
+              </li>
+            </>
+          );
+        })}
       </ul>
     </div>
   );
 };
 
 const ElementAnalytics: FC<Record<string, number>> = (data) => (
-  <ul className="flex">
+  <ul className="flex flex-wrap">
     {Object.entries(data).map(([error, count], i) => {
       const isLast = i === Object.entries(data).length - 1;
       return (
