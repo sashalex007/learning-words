@@ -13,11 +13,13 @@ import { FC } from "react";
 import { Practice } from "./practice";
 import { SettingsTab } from "./settings";
 import { LearningWords } from "./learning-words";
+import { Analytics } from "./analytics";
 
 const tabs: Tab[] = [
   { tab: "Practice", href: "/" },
   { tab: "Settings", href: "/settings" },
   { tab: "Words to learn", href: "/words" },
+  { tab: "Analytics", href: "/analytics" },
 ];
 
 export interface Tab {
@@ -25,7 +27,7 @@ export interface Tab {
   href: string;
 }
 
-const TabsComponent = [Practice, SettingsTab, LearningWords];
+const TabsComponent = [Practice, SettingsTab, LearningWords, Analytics];
 
 export const Main: FC = () => {
   const { push } = useRouter();
