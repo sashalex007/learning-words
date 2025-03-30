@@ -163,13 +163,12 @@ export namespace Text {
     const record = getLearningWordsAsRecord();
     const list = Object.entries(record);
     list.sort(([, a], [, b]) => b - a);
-    const words = list.slice(0, count);
+    const words = list
+
+
 
     // double the highest error count
-    return words.flatMap(([word, count]) => {
-      if (count > 3) return [word, word];
-      return [word];
-    });
+    return words.flatMap(([word, count]) => Array(count).fill(word));
   };
 
   /*
@@ -195,7 +194,7 @@ export namespace Text {
   export const addLearningWord = (word: string): void => {
     const words = getLearningWordsAsRecord();
     const hasError = !!words[word];
-    setLearningWords({ ...words, [word]: hasError ? 6 : 4 });
+    setLearningWords({ ...words, [word]: hasError ? 10 : 7 });
   };
 
   export const addCorrection = (word: string): void => {

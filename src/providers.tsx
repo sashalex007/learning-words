@@ -8,9 +8,8 @@ import {
   ColorModeScript,
   extendBaseTheme,
 } from "@chakra-ui/react";
-import chakraTheme from "@chakra-ui/theme";
 
-const { Button, Switch, Textarea, Input, Tabs, Link } = chakraTheme.components;
+import { Button, Switch, Textarea, Input, Tabs, Link } from "@chakra-ui/react";
 
 export const theme = extendBaseTheme({
   components: {
@@ -31,11 +30,11 @@ export const theme = extendBaseTheme({
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <CacheProvider>
+      
         <ChakraBaseProvider theme={theme}>{children}</ChakraBaseProvider>
-      </CacheProvider>
-
+    
       <ColorModeScript initialColorMode="dark" />
     </>
   );
 }
+9

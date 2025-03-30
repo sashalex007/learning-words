@@ -16,9 +16,9 @@ import { LearningWords } from "./learning-words";
 import { Analytics } from "./analytics";
 
 const tabs: Tab[] = [
-  { tab: "Practice", href: "/" },
-  { tab: "Settings", href: "/settings" },
-  { tab: "Words to learn", href: "/words" },
+  { tab: "Practice //", href: "/" },
+  { tab: "Settings //", href: "/settings" },
+  { tab: "Words to learn //", href: "/words" },
   { tab: "Analytics", href: "/analytics" },
 ];
 
@@ -51,6 +51,8 @@ export const Main: FC = () => {
           <Tab key={tab}>{tab}</Tab>
         ))}
       </TabList>
+
+      <br/>
 
       <TabPanels className="flex-1 flex flex-col justify-center pb-52">
         {tabs.map(({ tab }, index) => {

@@ -29,7 +29,7 @@ export const Words: FC<IWords> = ({
       {previousWords.map((word, i) => (
         <Word key={word + i} word={word} isPast={true} />
       ))}
-
+      
       {words.map((word, i) => {
         const index = initialIndex + i;
         const isCurrent = index === currentIndex;

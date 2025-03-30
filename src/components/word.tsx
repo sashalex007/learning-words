@@ -13,7 +13,7 @@ export const useLearningColors = (learningCount: number) => {
     useColorModeValue("blue.700", "cyan.300"),
   ];
 
-  return learningColors[learningCount - 1];
+  return learningColors[5];
 };
 
 interface IWordStyle {

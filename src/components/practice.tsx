@@ -76,7 +76,7 @@ export const Practice: FC = () => {
   const { progress, title } = Text.getCurrentText();
   const textWords = Text.getTextWords();
   const practiceWords = Text.getPracticeWords();
-
+  console.log(practiceWords)
   return (
     <PracticeContent
       key={progress + title}
@@ -115,6 +115,7 @@ const PracticeContent: FC<{
         </Suspense>
       </div>
 
+
       <PracticeFooter
         input={
           <Input
@@ -152,6 +153,7 @@ const PracticeArea: FC<{
 }) => {
   return (
     <>
+    
       {!!practiceWords.length && (
         <Words
           input={input}
@@ -162,6 +164,7 @@ const PracticeArea: FC<{
           learningWords={learningWords}
         />
       )}
+      
 
       <Words
         input={input}
